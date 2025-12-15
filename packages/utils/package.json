@@ -1,0 +1,53 @@
+{
+  "name": "@ecore/utils",
+  "version": "0.0.1",
+  "description": "A collection of utility functions for the Customer E-commerce Portal Application",
+  "private": true,
+  "author": "Jefferson Pillejera <jefferson.pillejera@gmail.com>",
+  "license": "MIT",
+  "main": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist/**"
+  ],
+  "scripts": {
+    "dev": "pnpm build --watch",
+    "build": "tsc -b -v",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.js"
+    }
+  },
+  "dependencies": {
+    "joi": "^17.13.3"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^11.1.2",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.15.29",
+    "@ecore/eslint-config": "workspace:*",
+    "@ecore/jest-config": "workspace:*",
+    "@ecore/typescript-config": "workspace:*",
+    "eslint": "^9.31.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.1"
+  }
+}

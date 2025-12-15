@@ -1,0 +1,45 @@
+{
+  "name": "@ecore/domain",
+  "version": "0.0.1",
+  "description": "A collection of core domain concepts and objects for the E-commerce Core API",
+  "private": true,
+  "author": "Jefferson Pillejera <jefferson.pillejera@gmail.com>",
+  "license": "MIT",
+  "main": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist/**"
+  ],
+  "scripts": {
+    "dev": "pnpm build --watch",
+    "build": "tsc -b -v",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.js"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "@ecore/eslint-config": "workspace:*",
+    "@ecore/typescript-config": "workspace:*",
+    "eslint": "^9.31.0",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.1"
+  }
+}

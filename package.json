@@ -1,0 +1,31 @@
+{
+  "name": "ecommerce-core",
+  "description": "A monorepo for the core backend of E-commerce Application",
+  "version": "0.0.1",
+  "author": "Jefferson Pillejera <jefferson.pillejera@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "ecore"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky"
+  },
+  "packageManager": "pnpm@10.24.0",
+  "devDependencies": {
+    "@ecore/eslint-config": "workspace:*",
+    "@ecore/typescript-config": "workspace:*",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.6.2",
+    "turbo": "^2.6.3"
+  }
+}

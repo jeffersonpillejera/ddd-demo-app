@@ -1,0 +1,57 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "./generated"
+  moduleFormat        = "cjs"
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Customer {
+  id                  String  @id
+  user                User    @relation(fields: [userId], references: [id])
+  userId              String  @unique
+  firstName           String
+  lastName            String
+  email               String
+  mobileNumber        String?
+  creditLimit         Decimal @db.Decimal(10, 2)
+  creditLimitCurrency String
+  addresses           Address[]
+  createdAt           DateTime
+  updatedAt           DateTime?
+}
+
+model User {
+  id                      String   @id
+  requiredLogin           Boolean
+  failedLoginAttempts     Int
+  isActive                Boolean
+  dateConfirmed           DateTime?
+  lastLoginDate           DateTime?
+  lastActivityDate        DateTime?
+  lastPasswordChangeDate  DateTime?
+  hashedPassword          String
+  salt                    String
+  iterations              Int
+  lastIpAddress           String
+  createdAt               DateTime
+  updatedAt               DateTime?
+  customer                Customer?
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  customer    Customer @relation(fields: [customerId], references: [id])
+  customerId  String
+  country     String
+  type        String
+  label       String
+  street1     String
+  street2     String?
+  city        String
+  province    String
+  zip         String
+}

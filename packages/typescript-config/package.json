@@ -1,0 +1,13 @@
+{
+  "name": "@ecore/typescript-config",
+  "version": "0.0.1",
+  "description": "A collection of TypeScript configurations for the Customer E-commerce Portal Application",
+  "exports": {
+    "./nest-tsconfig.json": "./nest-tsconfig.json"
+  },
+  "author": "Jefferson Pillejera <jefferson.pillejera@gmail.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

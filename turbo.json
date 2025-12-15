@@ -1,0 +1,102 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "globalEnv": [
+    "NODE_ENV",
+    "DATABASE_URL"
+  ],
+  "globalDependencies": [
+    "**/.env",
+    "**/.env.local",
+    "**/.env.*.local",
+    "tsconfig.json",
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!**/*.md",
+        "!**/*.test.ts",
+        "!**/*.spec.ts",
+        "!**/test/**",
+        "!**/tests/**",
+        "!**/__tests__/**"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**",
+        "build/**",
+        "lib/**"
+      ],
+      "env": ["NODE_ENV", "DATABASE_URL"]
+    },
+    "dev": { "cache": false, "persistent": true, "dependsOn": ["^build"] },
+    "lint": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!**/*.md",
+        ".eslintrc.js",
+        ".eslintrc.json",
+        ".eslintrc.mjs",
+        "eslint.config.js",
+        "eslint.config.mjs",
+        ".eslintignore"
+      ],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!**/*.md",
+        "jest.config.*",
+        "vitest.config.*"
+      ],
+      "env": ["NODE_ENV"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "test:cov": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!**/*.md",
+        "jest.config.*",
+        "vitest.config.*"
+      ],
+      "outputs": ["coverage/**", ".nyc_output/**"],
+      "env": ["NODE_ENV"]
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!**/*.md",
+        "jest.config.*",
+        "**/jest-e2e.json"
+      ],
+      "outputs": ["test-results/**", "coverage/**"],
+      "env": ["NODE_ENV", "DATABASE_URL"]
+    },
+    "test:debug": { "cache": false, "dependsOn": ["^build"] },
+    "format": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".prettierrc",
+        ".prettierrc.*",
+        "prettier.config.*"
+      ],
+      "outputs": [],
+      "cache": false
+    }
+  },
+  "ui": "tui"
+}

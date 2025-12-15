@@ -1,0 +1,8 @@
+{
+  "extends": "@ecore/typescript-config/nest-tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "module": "Node16"
+  }
+}
