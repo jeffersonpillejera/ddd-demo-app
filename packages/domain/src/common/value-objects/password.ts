@@ -60,19 +60,19 @@ export class Password extends ValueObject<PasswordProps> {
       );
     }
 
-    if (new RegExp('^(?=.*[A-Z]).+$').test(password)) {
+    if (!new RegExp('^(?=.*[A-Z]).+$').test(password)) {
       throw new Error('Password must contain at least one uppercase letter');
     }
 
-    if (new RegExp('^(?=.*[a-z]).+$').test(password)) {
+    if (!new RegExp('^(?=.*[a-z]).+$').test(password)) {
       throw new Error('Password must contain at least one lowercase letter');
     }
 
-    if (new RegExp('^(?=.*[0-9]).+$').test(password)) {
+    if (!new RegExp('^(?=.*[0-9]).+$').test(password)) {
       throw new Error('Password must contain at least one number');
     }
 
-    if (new RegExp('^(?=.*[!@#$%^&*]).+$').test(password)) {
+    if (!new RegExp('^(?=.*[!@#$%^&*]).+$').test(password)) {
       throw new Error('Password must contain at least one special character');
     }
 

@@ -101,6 +101,16 @@ export class User extends Entity<IUserProps> {
   }
 
   public signIn(password: string): void {
+    if (!this.props.isActive) {
+      throw new Error('User is not active. Please contact support.');
+    }
+
+    if (!this.props.dateConfirmed) {
+      throw new Error(
+        'User is not yet confirmed. Please confirm your email address. You will be unable to login until you confirm your email address.',
+      );
+    }
+
     if (!this.props.password.verifyPassword(password)) {
       this.props.failedLoginAttempts = this.props.failedLoginAttempts
         ? this.props.failedLoginAttempts + 1
@@ -110,6 +120,7 @@ export class User extends Entity<IUserProps> {
       }
       throw new Error('Invalid password');
     }
+
     this.props.failedLoginAttempts = 0;
     this.props.lastLoginDate = new Date();
     this.props.lastActivityDate = new Date();

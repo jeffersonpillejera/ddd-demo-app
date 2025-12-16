@@ -9,14 +9,14 @@ import {
 } from '@ecore/domain/common/value-objects/money';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class MoneyEntity implements MoneyProps {
+export class Money implements MoneyProps {
   @ApiProperty({ example: 1000.01 })
   amount: number;
   @ApiProperty({ example: CurrencyCodeEnum.USD })
   currency: CurrencyCodeEnum;
 }
 
-export class CustomerAddressEntity implements CustomerAddressDTO {
+export class CustomerAddress implements CustomerAddressDTO {
   @ApiProperty({ example: 'Home' })
   label: string;
   @ApiProperty({ example: '123 Main St' })
@@ -29,13 +29,13 @@ export class CustomerAddressEntity implements CustomerAddressDTO {
   province: string;
   @ApiProperty({ example: '12345' })
   zip: string;
-  @ApiProperty({ example: 'USA' })
+  @ApiProperty({ example: 'US' })
   country: string;
   @ApiProperty({ example: AddressTypeEnum.BILLING, enum: AddressTypeEnum })
   type: AddressTypeEnum;
 }
 
-export class CustomerEntity implements CustomerDTO {
+export class Customer implements CustomerDTO {
   @ApiProperty({ example: '123' })
   id: string;
   @ApiProperty({ example: 'john.doe@example.com' })
@@ -48,9 +48,9 @@ export class CustomerEntity implements CustomerDTO {
   mobileNumber?: string | null;
   @ApiProperty({
     example: { amount: 1000, currency: CurrencyCodeEnum.USD },
-    type: MoneyEntity,
+    type: Money,
   })
-  creditLimit: MoneyEntity;
+  creditLimit: Money;
   @ApiProperty({
     example: [
       {
@@ -60,12 +60,12 @@ export class CustomerEntity implements CustomerDTO {
         city: 'Anytown',
         province: 'CA',
         zip: '12345',
-        country: 'USA',
+        country: 'US',
         type: AddressTypeEnum.BILLING,
       },
     ],
-    type: CustomerAddressEntity,
+    type: CustomerAddress,
     isArray: true,
   })
-  addresses: CustomerAddressEntity[];
+  addresses: CustomerAddress[];
 }

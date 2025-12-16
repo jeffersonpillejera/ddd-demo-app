@@ -5,7 +5,7 @@ import { ApiController } from './dtos/common.dto';
 import { GetCustomerHandler } from '../../application/queries/get-customer/get-customer.handler';
 import { GetCustomerQuery } from '../../application/queries/get-customer/get-customer.query';
 import { ApiGetCustomer } from './dtos/customer.dto';
-import { CustomerEntity } from './entities/customer.entity';
+import { Customer } from './entities/customer.entity';
 
 @ApiController('customer')
 @Controller('customer')
@@ -19,7 +19,7 @@ export class CustomerController {
   @ApiGetCustomer()
   async getCustomer(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<CustomerEntity | void> {
+  ): Promise<Customer | void> {
     return this.getCustomerHandler.execute(new GetCustomerQuery(id));
   }
 }

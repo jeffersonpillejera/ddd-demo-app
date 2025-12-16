@@ -5,7 +5,6 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
   UnprocessableEntityException,
@@ -35,31 +34,23 @@ export class CustomerPresenter implements IPresenter<Customer, CustomerDTO> {
     };
   }
 
-  notFound(id?: string) {
-    throw new NotFoundException(
-      id ? `Customer with id ${id} not found` : 'Customer not found',
-    );
+  notFound(message?: string) {
+    throw new NotFoundException(message ?? 'Entity not found');
   }
 
   unauthorized() {
     throw new UnauthorizedException('Unauthorized');
   }
 
-  forbidden() {
-    throw new ForbiddenException(
-      'You are not authorized to access this resource',
-    );
+  forbidden(message?: string) {
+    throw new ForbiddenException(message ?? 'Forbidden');
   }
 
-  badRequest(error: Error) {
-    throw new BadRequestException(error.message);
+  badRequest(message?: string) {
+    throw new BadRequestException(message ?? 'Bad Request');
   }
 
-  internalServerError(error: Error) {
-    throw new InternalServerErrorException(error.message);
-  }
-
-  unprocessable(error: Error) {
-    throw new UnprocessableEntityException(error.message);
+  unprocessable(message?: string) {
+    throw new UnprocessableEntityException(message ?? 'Unprocessable Entity');
   }
 }
