@@ -7,7 +7,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { CustomerAddressDTO } from '../../../application/dtos/customer.dto';
-import { CustomerEntity } from '../entities/customer.entity';
+import { Customer } from '../entities/customer.entity';
 import { AddressTypeEnum } from '@ecore/domain/common/value-objects/address';
 import {
   IsArray,
@@ -16,6 +16,8 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  MaxLength,
+  MinLength,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -53,9 +55,11 @@ export class RegisterCustomerAddressDTO implements CustomerAddressDTO {
   @IsNotEmpty()
   zip: string;
 
-  @ApiProperty({ example: 'USA' })
+  @ApiProperty({ example: 'US' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(2)
+  @MinLength(2)
   country: string;
 
   @ApiProperty({ example: AddressTypeEnum.BILLING, enum: AddressTypeEnum })
@@ -66,7 +70,7 @@ export class RegisterCustomerAddressDTO implements CustomerAddressDTO {
 
 export class RegisterUserDTO implements Omit<RegisterUserDTO, 'lastIpAddress'> {
   @ApiProperty({ example: 'john.doe@example.com' })
-  @IsEmail()
+  @IsEmail(undefined, { message: 'Invalid email address' })
   @IsNotEmpty()
   email: string;
 
@@ -94,7 +98,7 @@ export class RegisterUserDTO implements Omit<RegisterUserDTO, 'lastIpAddress'> {
         city: 'Anytown',
         province: 'CA',
         zip: '12345',
-        country: 'USA',
+        country: 'US',
         type: AddressTypeEnum.BILLING,
       },
     ],
@@ -124,7 +128,7 @@ export function ApiGetCustomer() {
     ApiResponse({
       status: 200,
       description: 'The customer has been found',
-      type: CustomerEntity,
+      type: Customer,
     }),
     ApiCommonErrorResponses(),
   );
