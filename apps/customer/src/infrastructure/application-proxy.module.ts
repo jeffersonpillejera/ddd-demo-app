@@ -18,12 +18,18 @@ export class ApplicationProxyModule {
       module: ApplicationProxyModule,
       providers: [
         {
-          inject: [CustomerRepository, EventBusService],
+          inject: [CustomerRepository, EventBusService, CustomerPresenter],
           provide: this.REGISTER_USER_COMMAND,
           useFactory: (
             customerRepository: CustomerRepository,
             eventBusService: EventBusService,
-          ) => new RegisterUserHandler(customerRepository, eventBusService),
+            customerPresenter: CustomerPresenter,
+          ) =>
+            new RegisterUserHandler(
+              customerRepository,
+              eventBusService,
+              customerPresenter,
+            ),
         },
         {
           inject: [CustomerRepository, CustomerPresenter],

@@ -1,5 +1,6 @@
 import { ValueObject, ValueObjectProps } from '../../core/value-object';
 import * as crypto from 'crypto';
+import { BadRequestException } from '../../common/exceptions';
 
 const PASSWORD_LENGTH = 256;
 const MIN_PASSWORD_LENGTH = 12;
@@ -29,51 +30,59 @@ export class Password extends ValueObject<PasswordProps> {
     iterations,
   }: PasswordProps): Password {
     if (!hashedPassword || hashedPassword.trim() === '') {
-      throw new Error('Password is required');
+      throw new BadRequestException('Password is required');
     }
     if (!salt || salt.trim() === '') {
-      throw new Error('Salt is required');
+      throw new BadRequestException('Salt is required');
     }
     if (!iterations || isNaN(iterations)) {
-      throw new Error('Iterations must be a number');
+      throw new BadRequestException('Iterations must be a number');
     }
     if (iterations <= 0) {
-      throw new Error('Iterations must be greater than 0');
+      throw new BadRequestException('Iterations must be greater than 0');
     }
     return new Password({ hashedPassword, salt, iterations });
   }
 
   public static validateAndHashPassword(password: string): Password {
     if (!password || password.trim() === '') {
-      throw new Error('Password is required');
+      throw new BadRequestException('Password is required');
     }
 
     if (password.length < MIN_PASSWORD_LENGTH) {
-      throw new Error(
+      throw new BadRequestException(
         'Password must be at least ' + MIN_PASSWORD_LENGTH + ' characters long',
       );
     }
 
     if (password.length > PASSWORD_LENGTH) {
-      throw new Error(
+      throw new BadRequestException(
         'Password must be less than ' + PASSWORD_LENGTH + ' characters long',
       );
     }
 
     if (!new RegExp('^(?=.*[A-Z]).+$').test(password)) {
-      throw new Error('Password must contain at least one uppercase letter');
+      throw new BadRequestException(
+        'Password must contain at least one uppercase letter',
+      );
     }
 
     if (!new RegExp('^(?=.*[a-z]).+$').test(password)) {
-      throw new Error('Password must contain at least one lowercase letter');
+      throw new BadRequestException(
+        'Password must contain at least one lowercase letter',
+      );
     }
 
     if (!new RegExp('^(?=.*[0-9]).+$').test(password)) {
-      throw new Error('Password must contain at least one number');
+      throw new BadRequestException(
+        'Password must contain at least one number',
+      );
     }
 
     if (!new RegExp('^(?=.*[!@#$%^&*]).+$').test(password)) {
-      throw new Error('Password must contain at least one special character');
+      throw new BadRequestException(
+        'Password must contain at least one special character',
+      );
     }
 
     const salt = crypto

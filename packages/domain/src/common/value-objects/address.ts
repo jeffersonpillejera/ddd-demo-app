@@ -1,4 +1,5 @@
 import { ValueObject, ValueObjectProps } from '../../core/value-object';
+import { BadRequestException } from '../../common/exceptions';
 
 export enum AddressTypeEnum {
   BILLING = 'billing',
@@ -41,25 +42,25 @@ export class Address extends ValueObject<IAddressProps> {
     zip,
   }: IAddressProps): Address {
     if (!label || label.trim() === '') {
-      throw new Error('Label must be a non-empty string');
+      throw new BadRequestException('Label must be a non-empty string');
     }
     if (!street1 || street1.trim() === '') {
-      throw new Error('Street 1 must be a non-empty string');
+      throw new BadRequestException('Street 1 must be a non-empty string');
     }
     if (!city || city.trim() === '') {
-      throw new Error('City must be a non-empty string');
+      throw new BadRequestException('City must be a non-empty string');
     }
     if (!province || province.trim() === '') {
-      throw new Error('Province must be a non-empty string');
+      throw new BadRequestException('Province must be a non-empty string');
     }
     if (!zip || zip.trim() === '') {
-      throw new Error('Zip must be a non-empty string');
+      throw new BadRequestException('Zip must be a non-empty string');
     }
     if (!type || !Object.values(AddressTypeEnum).includes(type)) {
-      throw new Error('Type must be a valid address type');
+      throw new BadRequestException('Type must be a valid address type');
     }
     if (!country || !Object.values(CountryCodeEnum).includes(country)) {
-      throw new Error('Country must be a valid country code');
+      throw new BadRequestException('Country must be a valid country code');
     }
     return new Address({
       country,

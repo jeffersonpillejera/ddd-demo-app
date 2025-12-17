@@ -1,4 +1,5 @@
 import { ValueObjectProps, ValueObject } from '../../core/value-object';
+import { BadRequestException } from '../../common/exceptions';
 
 export enum CurrencyCodeEnum {
   USD = 'USD',
@@ -21,7 +22,9 @@ export class Money extends ValueObject<MoneyProps> {
 
   public add(money: Money): Money {
     if (this.props.currency !== money.props.currency) {
-      throw new Error('Cannot add money with different currencies');
+      throw new BadRequestException(
+        'Cannot add money with different currencies',
+      );
     }
 
     return new Money({
@@ -32,10 +35,10 @@ export class Money extends ValueObject<MoneyProps> {
 
   public static create({ amount, currency }: MoneyProps): Money {
     if (amount === undefined || amount === null || isNaN(amount)) {
-      throw new Error('Amount must be a number');
+      throw new BadRequestException('Amount must be a number');
     }
     if (!currency || !Object.values(CurrencyCodeEnum).includes(currency)) {
-      throw new Error('Currency must be a valid currency code');
+      throw new BadRequestException('Currency must be a valid currency code');
     }
     return new Money({ amount, currency });
   }

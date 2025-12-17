@@ -38,8 +38,8 @@ export class CustomerPresenter implements IPresenter<Customer, CustomerDTO> {
     throw new NotFoundException(message ?? 'Entity not found');
   }
 
-  unauthorized() {
-    throw new UnauthorizedException('Unauthorized');
+  unauthorized(message?: string) {
+    throw new UnauthorizedException(message ?? 'Unauthorized');
   }
 
   forbidden(message?: string) {

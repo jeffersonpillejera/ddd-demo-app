@@ -5,6 +5,10 @@ import { Money } from '@ecore/domain/common/value-objects/money';
 import { User } from './user';
 import { AggregateRoot } from '@ecore/domain/core/aggregate-root';
 import { UserRegisteredEvent } from '../events/user-registered.event';
+import {
+  BadRequestException,
+  UnprocessableException,
+} from '@ecore/domain/common/exceptions';
 
 export interface ICustomerProps {
   user: User;
@@ -66,19 +70,19 @@ export class Customer extends AggregateRoot<ICustomerProps> {
     id?: UniqueIdentifier,
   ): Customer {
     if (!user) {
-      throw new Error('User is required');
+      throw new UnprocessableException('User is required');
     }
     if (!firstName || firstName.trim() === '') {
-      throw new Error('First name is required');
+      throw new BadRequestException('First name is required');
     }
     if (!lastName || lastName.trim() === '') {
-      throw new Error('Last name is required');
+      throw new BadRequestException('Last name is required');
     }
     if (!email) {
-      throw new Error('Email is required');
+      throw new BadRequestException('Email is required');
     }
     if (!creditLimit) {
-      throw new Error('Credit limit is required');
+      throw new BadRequestException('Credit limit is required');
     }
     const customer = new Customer(
       {

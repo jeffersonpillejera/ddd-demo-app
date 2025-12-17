@@ -1,4 +1,5 @@
 import { ValueObject, ValueObjectProps } from '../../core/value-object';
+import { BadRequestException } from '../../common/exceptions';
 
 export interface IEmailAddressProps extends ValueObjectProps {
   value: string;
@@ -15,7 +16,7 @@ export class EmailAddress extends ValueObject<IEmailAddressProps> {
 
   public static create(email: string): EmailAddress {
     if (!email?.includes('@')) {
-      throw new Error('Invalid email address');
+      throw new BadRequestException('Invalid email address');
     }
     return new EmailAddress({ value: email });
   }
