@@ -27,6 +27,14 @@
       "import": "./dist/index.js",
       "require": "./dist/index.js"
     },
+    "./common/exceptions": {
+      "import": "./dist/common/exceptions/index.js",
+      "require": "./dist/common/exceptions/index.js"
+    },
+    "./common/value-objects": {
+      "import": "./dist/common/value-objects/index.js",
+      "require": "./dist/common/value-objects/index.js"
+    },
     "./*": {
       "import": "./dist/*.js",
       "require": "./dist/*.js"

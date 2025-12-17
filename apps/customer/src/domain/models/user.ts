@@ -2,6 +2,10 @@ import { Entity } from '@ecore/domain/core/entity';
 import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
 import { Password } from '@ecore/domain/common/value-objects/password';
 import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
+import {
+  BadRequestException,
+  UnprocessableException,
+} from '@ecore/domain/common/exceptions';
 
 export interface IUserProps {
   requiredLogin?: boolean | null;
@@ -73,10 +77,10 @@ export class User extends Entity<IUserProps> {
     id?: UniqueIdentifier,
   ): User {
     if (!password) {
-      throw new Error('Password is required');
+      throw new BadRequestException('Password is required');
     }
     if (!lastIpAddress) {
-      throw new Error('Last IP address is required');
+      throw new UnprocessableException('Last IP address is required');
     }
     return new User(
       {
@@ -102,11 +106,13 @@ export class User extends Entity<IUserProps> {
 
   public signIn(password: string): void {
     if (!this.props.isActive) {
-      throw new Error('User is not active. Please contact support.');
+      throw new BadRequestException(
+        'User is not active. Please contact support.',
+      );
     }
 
     if (!this.props.dateConfirmed) {
-      throw new Error(
+      throw new UnprocessableException(
         'User is not yet confirmed. Please confirm your email address. You will be unable to login until you confirm your email address.',
       );
     }
@@ -118,7 +124,7 @@ export class User extends Entity<IUserProps> {
       if (this.props.failedLoginAttempts >= 3) {
         this.props.isActive = false;
       }
-      throw new Error('Invalid password');
+      throw new BadRequestException('Invalid password');
     }
 
     this.props.failedLoginAttempts = 0;
