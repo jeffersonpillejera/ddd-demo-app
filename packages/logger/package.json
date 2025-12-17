@@ -1,7 +1,7 @@
 {
-  "name": "@ecore/exception-filters",
+  "name": "@ecore/logger",
   "version": "0.0.1",
-  "description": "A collection of exception filters for the Customer E-commerce Portal Application",
+  "description": "A custom logger",
   "private": true,
   "author": "Jefferson Pillejera <jefferson.pillejera@gmail.com>",
   "license": "MIT",
@@ -37,13 +37,9 @@
     "@nestjs/common": "^11.1.2",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.2",
-    "@prisma/client": "^6.8.2",
-    "@ecore/utils": "workspace:*",
-    "@ecore/domain": "workspace:*",
-    "express": "^5.1.0"
+    "@ecore/domain": "workspace:*"
   },
   "devDependencies": {
-    "@types/express": "^5.0.2",
     "@types/node": "^22.15.29",
     "@ecore/eslint-config": "workspace:*",
     "@ecore/typescript-config": "workspace:*",

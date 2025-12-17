@@ -7,8 +7,13 @@ import { CustomerPresenter } from './presenters/customer.presenter';
 import { RegisterUserHandler } from '../application/commands/register-user/register-user.handler';
 import { GetCustomerHandler } from '../application/queries/get-customer/get-customer.handler';
 import { PresentersModule } from './presenters/presenters.module';
+import { LoggerModule } from '@ecore/logger/logger.module';
+import { LoggerService } from '@ecore/logger/logger.service';
+import { ILogger } from '@ecore/domain/core/logger';
 
-@Module({ imports: [RepositoriesModule, EventBusModule, PresentersModule] })
+@Module({
+  imports: [RepositoriesModule, EventBusModule, PresentersModule, LoggerModule],
+})
 export class ApplicationProxyModule {
   static REGISTER_USER_COMMAND = 'REGISTER_USER_COMMAND';
   static GET_CUSTOMER_QUERY = 'GET_CUSTOMER_QUERY';
@@ -18,26 +23,32 @@ export class ApplicationProxyModule {
       module: ApplicationProxyModule,
       providers: [
         {
-          inject: [CustomerRepository, EventBusService, CustomerPresenter],
+          inject: [CustomerRepository, EventBusService, LoggerService],
           provide: this.REGISTER_USER_COMMAND,
           useFactory: (
             customerRepository: CustomerRepository,
             eventBusService: EventBusService,
-            customerPresenter: CustomerPresenter,
+            loggerService: LoggerService,
           ) =>
             new RegisterUserHandler(
               customerRepository,
               eventBusService,
-              customerPresenter,
+              loggerService as ILogger,
             ),
         },
         {
-          inject: [CustomerRepository, CustomerPresenter],
+          inject: [CustomerRepository, CustomerPresenter, LoggerService],
           provide: this.GET_CUSTOMER_QUERY,
           useFactory: (
             customerRepository: CustomerRepository,
             customerPresenter: CustomerPresenter,
-          ) => new GetCustomerHandler(customerRepository, customerPresenter),
+            loggerService: LoggerService,
+          ) =>
+            new GetCustomerHandler(
+              customerRepository,
+              customerPresenter,
+              loggerService as ILogger,
+            ),
         },
       ],
       exports: [this.REGISTER_USER_COMMAND, this.GET_CUSTOMER_QUERY],

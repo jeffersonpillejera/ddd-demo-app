@@ -7,6 +7,14 @@ import {
   Logger,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { DomainError } from '@ecore/domain/core/domain-error';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+  UnauthorizedException,
+  UnprocessableException,
+} from '@ecore/domain/common/exceptions';
 
 interface HttpExceptionResponse {
   message: string;
@@ -28,11 +36,35 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 
-    const httpStatus =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : ((exception as ErrorWithStatus).status ??
-          HttpStatus.INTERNAL_SERVER_ERROR);
+    let httpStatus: number;
+    if (exception instanceof DomainError) {
+      switch (exception.constructor) {
+        case BadRequestException:
+          httpStatus = HttpStatus.BAD_REQUEST;
+          break;
+        case ForbiddenException:
+          httpStatus = HttpStatus.FORBIDDEN;
+          break;
+        case UnauthorizedException:
+          httpStatus = HttpStatus.UNAUTHORIZED;
+          break;
+        case UnprocessableException:
+          httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+          break;
+        case NotFoundException:
+          httpStatus = HttpStatus.NOT_FOUND;
+          break;
+        default:
+          httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+          break;
+      }
+    } else {
+      httpStatus =
+        exception instanceof HttpException
+          ? exception.getStatus()
+          : ((exception as ErrorWithStatus).status ??
+            HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     let errorMessage = 'Internal server error';
     let errorDetails: string | null = null;
