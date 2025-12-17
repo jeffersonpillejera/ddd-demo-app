@@ -29,6 +29,7 @@ export class RegisterUserHandler implements Command<RegisterUserDTO> {
 
   async execute(request: RegisterUserDTO) {
     this.logger.log(`Registering user with email ${request.email}`);
+
     const {
       email,
       firstName,
