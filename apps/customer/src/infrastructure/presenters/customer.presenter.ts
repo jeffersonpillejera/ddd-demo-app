@@ -1,14 +1,7 @@
 import { CustomerDTO } from '../../application/dtos/customer.dto';
 import { Customer } from '../../domain/models/customer';
 import { IPresenter } from '@ecore/domain/core/presenter';
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CustomerPresenter implements IPresenter<Customer, CustomerDTO> {
@@ -32,25 +25,5 @@ export class CustomerPresenter implements IPresenter<Customer, CustomerDTO> {
           type: address.props.type,
         })) ?? [],
     };
-  }
-
-  notFound(message?: string) {
-    throw new NotFoundException(message ?? 'Entity not found');
-  }
-
-  unauthorized(message?: string) {
-    throw new UnauthorizedException(message ?? 'Unauthorized');
-  }
-
-  forbidden(message?: string) {
-    throw new ForbiddenException(message ?? 'Forbidden');
-  }
-
-  badRequest(message?: string) {
-    throw new BadRequestException(message ?? 'Bad Request');
-  }
-
-  unprocessable(message?: string) {
-    throw new UnprocessableEntityException(message ?? 'Unprocessable Entity');
   }
 }

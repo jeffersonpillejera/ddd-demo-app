@@ -41,6 +41,9 @@ importers:
       '@ecore/http':
         specifier: workspace:*
         version: link:../../packages/http
+      '@ecore/logger':
+        specifier: workspace:*
+        version: link:../../packages/logger
       '@ecore/utils':
         specifier: workspace:*
         version: link:../../packages/utils
@@ -328,6 +331,9 @@ importers:
 
   packages/exception-filters:
     dependencies:
+      '@ecore/domain':
+        specifier: workspace:*
+        version: link:../domain
       '@ecore/utils':
         specifier: workspace:*
         version: link:../utils
@@ -432,6 +438,49 @@ importers:
       next:
         specifier: ^14.2.32
         version: 14.2.33(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+
+  packages/logger:
+    dependencies:
+      '@ecore/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@nestjs/axios':
+        specifier: ^4.0.1
+        version: 4.0.1(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.13.2)(rxjs@7.8.2)
+      '@nestjs/common':
+        specifier: ^11.1.2
+        version: 11.1.9(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/config':
+        specifier: ^4.0.2
+        version: 4.0.2(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
+      '@nestjs/core':
+        specifier: ^11.1.2
+        version: 11.1.9(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.9)(@nestjs/websockets@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+    devDependencies:
+      '@ecore/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@ecore/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.29
+        version: 22.19.1
+      eslint:
+        specifier: ^9.31.0
+        version: 9.39.1(jiti@2.6.1)
+      ts-loader:
+        specifier: ^9.5.2
+        version: 9.5.4(typescript@5.9.3)(webpack@5.103.0)
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@22.19.1)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+      typescript-eslint:
+        specifier: ^8.33.1
+        version: 8.48.1(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
 
   packages/typescript-config: {}
 
