@@ -1,6 +1,6 @@
-import { ICustomerRepository } from '../../../domain/repositories/customer.repository';
+import { CustomerRepository } from '../../../domain/repositories/customer.repository';
 import { CustomerDTO } from '../../dtos/customer.dto';
-import { IPresenter } from '@ecore/domain/core/presenter';
+import { Presenter } from '@ecore/domain/core/presenter';
 import { Query } from '@ecore/domain/core/cqrs/query';
 import { Customer } from '../../../domain/models/customer';
 import { GetCustomerQuery } from './get-customer.query';
@@ -12,11 +12,8 @@ export class GetCustomerHandler implements Query<
   Promise<CustomerDTO | void>
 > {
   constructor(
-    private readonly customerRepository: ICustomerRepository,
-    private readonly customerPresenter: IPresenter<
-      Customer,
-      CustomerDTO | void
-    >,
+    private readonly customerRepository: CustomerRepository,
+    private readonly customerPresenter: Presenter<Customer, CustomerDTO | void>,
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);

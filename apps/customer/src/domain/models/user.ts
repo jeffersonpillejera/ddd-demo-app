@@ -7,7 +7,7 @@ import {
   UnprocessableException,
 } from '@ecore/domain/common/exceptions';
 
-export interface IUserProps {
+export interface UserProps {
   requiredLogin?: boolean | null;
   failedLoginAttempts?: number | null;
   isActive?: boolean | null;
@@ -21,8 +21,8 @@ export interface IUserProps {
   updatedAt?: Date | null;
 }
 
-export class User extends Entity<IUserProps> {
-  private constructor(props: IUserProps, id?: UniqueIdentifier) {
+export class User extends Entity<UserProps> {
+  private constructor(props: UserProps, id?: UniqueIdentifier) {
     super(props, id);
   }
 
@@ -73,7 +73,7 @@ export class User extends Entity<IUserProps> {
       lastPasswordChangeDate,
       createdAt,
       updatedAt,
-    }: IUserProps,
+    }: UserProps,
     id?: UniqueIdentifier,
   ): User {
     if (!password) {

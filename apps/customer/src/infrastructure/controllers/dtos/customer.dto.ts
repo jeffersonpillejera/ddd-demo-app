@@ -6,7 +6,10 @@ import {
   ApiPropertyOptional,
   ApiResponse,
 } from '@nestjs/swagger';
-import { CustomerAddressDTO } from '../../../application/dtos/customer.dto';
+import {
+  CustomerAddressDTO,
+  RegisterUserDTO as ApplicationRegisterUserDTO,
+} from '../../../application/dtos/customer.dto';
 import { Customer } from '../entities/customer.entity';
 import { AddressTypeEnum } from '@ecore/domain/common/value-objects/address';
 import {
@@ -68,7 +71,10 @@ export class RegisterCustomerAddressDTO implements CustomerAddressDTO {
   type: AddressTypeEnum;
 }
 
-export class RegisterUserDTO implements Omit<RegisterUserDTO, 'lastIpAddress'> {
+export class RegisterUserDTO implements Omit<
+  ApplicationRegisterUserDTO,
+  'lastIpAddress'
+> {
   @ApiProperty({ example: 'john.doe@example.com' })
   @IsEmail(undefined, { message: 'Invalid email address' })
   @IsNotEmpty()

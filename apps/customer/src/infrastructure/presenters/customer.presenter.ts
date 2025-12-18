@@ -1,10 +1,10 @@
 import { CustomerDTO } from '../../application/dtos/customer.dto';
 import { Customer } from '../../domain/models/customer';
-import { IPresenter } from '@ecore/domain/core/presenter';
+import { Presenter } from '@ecore/domain/core/presenter';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class CustomerPresenter implements IPresenter<Customer, CustomerDTO> {
+export class CustomerPresenter implements Presenter<Customer, CustomerDTO> {
   toDTO(domain: Customer): CustomerDTO {
     return {
       id: domain.id.toString(),

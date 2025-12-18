@@ -1,12 +1,12 @@
 import { ValueObject, ValueObjectProps } from '../../core/value-object';
 import { BadRequestException } from '../../common/exceptions';
 
-export interface IEmailAddressProps extends ValueObjectProps {
+export interface EmailAddressProps extends ValueObjectProps {
   value: string;
 }
 
-export class EmailAddress extends ValueObject<IEmailAddressProps> {
-  private constructor(props: IEmailAddressProps) {
+export class EmailAddress extends ValueObject<EmailAddressProps> {
+  private constructor(props: EmailAddressProps) {
     super(props);
   }
 

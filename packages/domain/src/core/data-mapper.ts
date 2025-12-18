@@ -1,4 +1,4 @@
-export interface IDataMapper<E, P = unknown> {
+export interface DataMapper<E, P = unknown> {
   toDomain(data: P): E;
   toPersistence(domain: E): P;
 }
