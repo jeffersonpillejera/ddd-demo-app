@@ -11,7 +11,7 @@ export enum CountryCodeEnum {
   PH = 'PH',
 }
 
-export interface IAddressProps extends ValueObjectProps {
+export interface AddressProps extends ValueObjectProps {
   label: string;
   street1: string;
   street2?: string;
@@ -22,12 +22,12 @@ export interface IAddressProps extends ValueObjectProps {
   type: AddressTypeEnum;
 }
 
-export class Address extends ValueObject<IAddressProps> {
-  private constructor(props: IAddressProps) {
+export class Address extends ValueObject<AddressProps> {
+  private constructor(props: AddressProps) {
     super(props);
   }
 
-  get value(): IAddressProps {
+  get value(): AddressProps {
     return this.props;
   }
 
@@ -40,7 +40,7 @@ export class Address extends ValueObject<IAddressProps> {
     city,
     province,
     zip,
-  }: IAddressProps): Address {
+  }: AddressProps): Address {
     if (!label || label.trim() === '') {
       throw new BadRequestException('Label must be a non-empty string');
     }

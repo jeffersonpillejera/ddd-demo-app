@@ -12,7 +12,15 @@ import { LoggerService } from '@ecore/logger/logger.service';
 import { ILogger } from '@ecore/domain/core/logger';
 
 @Module({
-  imports: [RepositoriesModule, EventBusModule, PresentersModule, LoggerModule],
+  imports: [
+    RepositoriesModule,
+    EventBusModule,
+    PresentersModule,
+    LoggerModule.register({
+      logLevels: ['error', 'warn', 'log'],
+      prefix: 'CustomerService',
+    }),
+  ],
 })
 export class ApplicationProxyModule {
   static REGISTER_USER_COMMAND = 'REGISTER_USER_COMMAND';

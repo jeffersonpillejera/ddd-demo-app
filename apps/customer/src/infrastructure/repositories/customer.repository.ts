@@ -1,12 +1,12 @@
 import { PersistenceService } from '../persistence/persistence.service';
-import { ICustomerRepository } from '../../domain/repositories/customer.repository';
+import { CustomerRepository as DomainCustomerRepository } from '../../domain/repositories/customer.repository';
 import { Customer } from '../../domain/models/customer';
 import { Injectable } from '@nestjs/common';
 import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
 import { CustomerDataMapper } from '../data-mappers/customer.data-mapper';
 
 @Injectable()
-export class CustomerRepository implements ICustomerRepository {
+export class CustomerRepository implements DomainCustomerRepository {
   constructor(
     private readonly persistenceService: PersistenceService,
     private readonly customerDataMapper: CustomerDataMapper,

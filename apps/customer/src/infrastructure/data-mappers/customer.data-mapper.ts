@@ -3,7 +3,7 @@ import {
   Money,
 } from '@ecore/domain/common/value-objects/money';
 import { Customer } from '../../domain/models/customer';
-import { IDataMapper } from '@ecore/domain/core/data-mapper';
+import { DataMapper } from '@ecore/domain/core/data-mapper';
 import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
 import {
   Address,
@@ -29,7 +29,7 @@ type PersistCustomerDTO = Omit<
 > & { addresses: Prisma.AddressCreateWithoutCustomerInput[] };
 
 @Injectable()
-export class CustomerDataMapper implements IDataMapper<
+export class CustomerDataMapper implements DataMapper<
   Customer,
   PersistCustomerDTO | PesistedCustomerEntity
 > {

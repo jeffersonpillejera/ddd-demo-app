@@ -10,7 +10,7 @@ import {
   UnprocessableException,
 } from '@ecore/domain/common/exceptions';
 
-export interface ICustomerProps {
+export interface CustomerProps {
   user: User;
   firstName: string;
   lastName: string;
@@ -22,8 +22,8 @@ export interface ICustomerProps {
   updatedAt?: Date | null;
 }
 
-export class Customer extends AggregateRoot<ICustomerProps> {
-  private constructor(props: ICustomerProps, id?: UniqueIdentifier) {
+export class Customer extends AggregateRoot<CustomerProps> {
+  private constructor(props: CustomerProps, id?: UniqueIdentifier) {
     super(props, id);
   }
 
@@ -66,7 +66,7 @@ export class Customer extends AggregateRoot<ICustomerProps> {
       addresses,
       createdAt,
       updatedAt,
-    }: ICustomerProps,
+    }: CustomerProps,
     id?: UniqueIdentifier,
   ): Customer {
     if (!user) {

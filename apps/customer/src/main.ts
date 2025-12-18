@@ -8,12 +8,20 @@ import {
   GlobalExceptionFilter,
   PrismaClientExceptionFilter,
 } from '@ecore/exception-filters';
+import { LoggerService } from '@ecore/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     forceCloseConnections: true,
-    logger: ['error', 'warn', 'log'],
+    bufferLogs: true,
   });
+
+  app.useLogger(
+    new LoggerService({
+      logLevels: ['error', 'warn', 'log'],
+      prefix: 'CustomerService',
+    }),
+  );
 
   const envConfigService = app.get<EnvConfigService>(EnvConfigService);
 

@@ -1,6 +1,6 @@
 import { Command } from '@ecore/domain/core/cqrs/command';
 import { Customer } from '../../../domain/models/customer';
-import { ICustomerRepository } from '../../../domain/repositories/customer.repository';
+import { CustomerRepository } from '../../../domain/repositories/customer.repository';
 import { User } from '../../../domain/models/user';
 import {
   Address,
@@ -12,7 +12,7 @@ import {
   Money,
 } from '@ecore/domain/common/value-objects/money';
 import { Password } from '@ecore/domain/common/value-objects/password';
-import { IDomainEventBus } from '@ecore/domain/core/domain-event-bus';
+import { DomainEventBus } from '@ecore/domain/core/domain-event-bus';
 import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
 import { RegisterUserDTO } from '../../dtos/customer.dto';
 import { BadRequestException } from '@ecore/domain/common/exceptions';
@@ -20,8 +20,8 @@ import { ILogger } from '@ecore/domain/core/logger';
 
 export class RegisterUserHandler implements Command<RegisterUserDTO> {
   constructor(
-    private readonly customerRepository: ICustomerRepository,
-    private readonly domainEventBus: IDomainEventBus,
+    private readonly customerRepository: CustomerRepository,
+    private readonly domainEventBus: DomainEventBus,
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);

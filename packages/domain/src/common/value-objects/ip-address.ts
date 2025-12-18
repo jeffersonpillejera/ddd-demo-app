@@ -2,12 +2,12 @@ import { ValueObject, ValueObjectProps } from '../../core/value-object';
 import { isIPv4, isIPv6, isIP } from 'net';
 import { BadRequestException } from '../../common/exceptions';
 
-export interface IIpAddressProps extends ValueObjectProps {
+export interface IpAddressProps extends ValueObjectProps {
   value: string;
 }
 
-export class IpAddress extends ValueObject<IIpAddressProps> {
-  private constructor(props: IIpAddressProps) {
+export class IpAddress extends ValueObject<IpAddressProps> {
+  private constructor(props: IpAddressProps) {
     super(props);
   }
 
