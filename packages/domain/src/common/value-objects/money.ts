@@ -20,15 +20,75 @@ export class Money extends ValueObject<MoneyProps> {
     return this.props;
   }
 
-  public add(money: Money): Money {
-    if (this.props.currency !== money.props.currency) {
+  public add(addend: Money | number): Money {
+    if (typeof addend === 'number') {
+      return new Money({
+        amount: this.props.amount + addend,
+        currency: this.props.currency,
+      });
+    }
+    if (this.props.currency !== addend.props.currency) {
       throw new BadRequestException(
         'Cannot add money with different currencies',
       );
     }
 
     return new Money({
-      amount: this.props.amount + money.props.amount,
+      amount: this.props.amount + addend.props.amount,
+      currency: this.props.currency,
+    });
+  }
+
+  public subtract(subtrahend: Money | number): Money {
+    if (typeof subtrahend === 'number') {
+      return new Money({
+        amount: this.props.amount - subtrahend,
+        currency: this.props.currency,
+      });
+    }
+    if (this.props.currency !== subtrahend.props.currency) {
+      throw new BadRequestException(
+        'Cannot subtract money with different currencies',
+      );
+    }
+    return new Money({
+      amount: this.props.amount - subtrahend.props.amount,
+      currency: this.props.currency,
+    });
+  }
+
+  public multiply(multiplier: Money | number): Money {
+    if (typeof multiplier === 'number') {
+      return new Money({
+        amount: this.props.amount * multiplier,
+        currency: this.props.currency,
+      });
+    }
+    if (this.props.currency !== multiplier.props.currency) {
+      throw new BadRequestException(
+        'Cannot multiply money with different currencies',
+      );
+    }
+    return new Money({
+      amount: this.props.amount * multiplier.props.amount,
+      currency: this.props.currency,
+    });
+  }
+
+  public divide(divisor: Money | number): Money {
+    if (typeof divisor === 'number') {
+      return new Money({
+        amount: this.props.amount / divisor,
+        currency: this.props.currency,
+      });
+    }
+    if (this.props.currency !== divisor.props.currency) {
+      throw new BadRequestException(
+        'Cannot divide money with different currencies',
+      );
+    }
+    return new Money({
+      amount: this.props.amount / divisor.props.amount,
       currency: this.props.currency,
     });
   }

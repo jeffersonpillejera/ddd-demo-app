@@ -4,8 +4,8 @@ import { EventBusModule } from '@ecore/event-bus/event-bus.module';
 import { CustomerRepository } from './repositories/customer.repository';
 import { EventBusService } from '@ecore/event-bus/event-bus.service';
 import { CustomerPresenter } from './presenters/customer.presenter';
-import { RegisterUserHandler } from '../application/commands/register-user/register-user.handler';
-import { GetCustomerHandler } from '../application/queries/get-customer/get-customer.handler';
+import { CreateCustomerCommand } from '../application/commands/create-customer.command';
+import { GetCustomerQuery } from '../application/queries/get-customer.query';
 import { PresentersModule } from './presenters/presenters.module';
 import { LoggerModule } from '@ecore/logger/logger.module';
 import { LoggerService } from '@ecore/logger/logger.service';
@@ -23,7 +23,7 @@ import { ILogger } from '@ecore/domain/core/logger';
   ],
 })
 export class ApplicationProxyModule {
-  static REGISTER_USER_COMMAND = 'REGISTER_USER_COMMAND';
+  static CREATE_CUSTOMER_COMMAND = 'CREATE_CUSTOMER_COMMAND';
   static GET_CUSTOMER_QUERY = 'GET_CUSTOMER_QUERY';
 
   static register(): DynamicModule {
@@ -32,13 +32,13 @@ export class ApplicationProxyModule {
       providers: [
         {
           inject: [CustomerRepository, EventBusService, LoggerService],
-          provide: this.REGISTER_USER_COMMAND,
+          provide: this.CREATE_CUSTOMER_COMMAND,
           useFactory: (
             customerRepository: CustomerRepository,
             eventBusService: EventBusService,
             loggerService: LoggerService,
           ) =>
-            new RegisterUserHandler(
+            new CreateCustomerCommand(
               customerRepository,
               eventBusService,
               loggerService as ILogger,
@@ -52,14 +52,14 @@ export class ApplicationProxyModule {
             customerPresenter: CustomerPresenter,
             loggerService: LoggerService,
           ) =>
-            new GetCustomerHandler(
+            new GetCustomerQuery(
               customerRepository,
               customerPresenter,
               loggerService as ILogger,
             ),
         },
       ],
-      exports: [this.REGISTER_USER_COMMAND, this.GET_CUSTOMER_QUERY],
+      exports: [this.CREATE_CUSTOMER_COMMAND, this.GET_CUSTOMER_QUERY],
     };
   }
 }

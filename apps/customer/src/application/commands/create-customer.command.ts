@@ -1,7 +1,7 @@
 import { Command } from '@ecore/domain/core/cqrs/command';
-import { Customer } from '../../../domain/models/customer';
-import { CustomerRepository } from '../../../domain/repositories/customer.repository';
-import { User } from '../../../domain/models/user';
+import { Customer } from '../../domain/models/customer';
+import { CustomerRepository } from '../../domain/repositories/customer.repository';
+import { User } from '../../domain/models/user';
 import {
   Address,
   CountryCodeEnum,
@@ -14,11 +14,11 @@ import {
 import { Password } from '@ecore/domain/common/value-objects/password';
 import { DomainEventBus } from '@ecore/domain/core/domain-event-bus';
 import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
-import { RegisterUserDTO } from '../../dtos/customer.dto';
 import { BadRequestException } from '@ecore/domain/common/exceptions';
 import { ILogger } from '@ecore/domain/core/logger';
+import { CreateCustomerDTO } from '../dtos/customer.dto';
 
-export class RegisterUserHandler implements Command<RegisterUserDTO> {
+export class CreateCustomerCommand implements Command<CreateCustomerDTO> {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly domainEventBus: DomainEventBus,
@@ -27,8 +27,8 @@ export class RegisterUserHandler implements Command<RegisterUserDTO> {
     this.logger.setContext(this.constructor.name);
   }
 
-  async execute(request: RegisterUserDTO) {
-    this.logger.log(`Registering user with email ${request.email}`);
+  async execute(request: CreateCustomerDTO) {
+    this.logger.log(`Creating customer with email ${request.email}`);
 
     const {
       email,
@@ -77,6 +77,6 @@ export class RegisterUserHandler implements Command<RegisterUserDTO> {
 
     await this.customerRepository.save(customer);
     this.domainEventBus.publish(customer);
-    this.logger.log(`Customer with email ${email} registered successfully`);
+    this.logger.log(`Customer with email ${email} created successfully`);
   }
 }

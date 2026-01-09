@@ -1,0 +1,39 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "./generated"
+  moduleFormat        = "cjs"
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Order {
+  id            String @id
+  status        String
+  customerId    String
+  dateOrdered   DateTime
+  discount      Decimal @db.Decimal(10, 2)
+  totalTax      Decimal @db.Decimal(10, 2)
+  subTotal      Decimal @db.Decimal(10, 2)
+  grandTotal    Decimal @db.Decimal(10, 2)
+  currency      String
+  items         OrderItem[]
+  createdAt     DateTime
+  updatedAt     DateTime?
+  confirmedAt   DateTime?
+  cancelledAt   DateTime?
+  shippedAt     DateTime?
+  deliveredAt   DateTime?
+  completedAt   DateTime?
+}
+
+model OrderItem {
+  id          String @id
+  orderId     String
+  order       Order @relation(fields: [orderId], references: [id])
+  productId   String
+  quantity    Int
+  unitPrice   Decimal @db.Decimal(10, 2)
+}

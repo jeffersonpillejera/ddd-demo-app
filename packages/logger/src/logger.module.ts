@@ -1,7 +1,12 @@
-import { ConsoleLoggerOptions, DynamicModule, Module } from '@nestjs/common';
+import {
+  ConsoleLoggerOptions,
+  DynamicModule,
+  Module,
+  Scope,
+} from '@nestjs/common';
 import { LoggerService } from './logger.service';
 
-@Module({ providers: [LoggerService], exports: [LoggerService] })
+@Module({})
 export class LoggerModule {
   static register(options?: ConsoleLoggerOptions): DynamicModule {
     return {
@@ -9,6 +14,7 @@ export class LoggerModule {
       providers: [
         {
           provide: LoggerService,
+          scope: Scope.TRANSIENT,
           useFactory: () =>
             new LoggerService(
               options ?? {

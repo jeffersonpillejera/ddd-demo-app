@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import {
   CustomerAddressDTO,
-  RegisterUserDTO as ApplicationRegisterUserDTO,
+  CreateCustomerDTO as ApplicationCreateCustomerDTO,
 } from '../../../application/dtos/customer.dto';
 import { Customer } from '../entities/customer.entity';
 import { AddressTypeEnum } from '@ecore/domain/common/value-objects/address';
@@ -27,7 +27,7 @@ import { Type } from 'class-transformer';
 import { applyDecorators } from '@nestjs/common';
 import { ApiCommonErrorResponses } from './common.dto';
 
-export class RegisterCustomerAddressDTO implements CustomerAddressDTO {
+export class CreateCustomerAddressDTO implements CustomerAddressDTO {
   @ApiProperty({ example: 'Home' })
   @IsString()
   @IsNotEmpty()
@@ -71,8 +71,8 @@ export class RegisterCustomerAddressDTO implements CustomerAddressDTO {
   type: AddressTypeEnum;
 }
 
-export class RegisterUserDTO implements Omit<
-  ApplicationRegisterUserDTO,
+export class CreateCustomerDTO implements Omit<
+  ApplicationCreateCustomerDTO,
   'lastIpAddress'
 > {
   @ApiProperty({ example: 'john.doe@example.com' })
@@ -108,14 +108,14 @@ export class RegisterUserDTO implements Omit<
         type: AddressTypeEnum.BILLING,
       },
     ],
-    type: RegisterCustomerAddressDTO,
+    type: CreateCustomerAddressDTO,
     isArray: true,
   })
   @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => RegisterCustomerAddressDTO)
-  addresses?: RegisterCustomerAddressDTO[];
+  @Type(() => CreateCustomerAddressDTO)
+  addresses: CreateCustomerAddressDTO[];
 
   @ApiProperty({ example: 'password' })
   @IsString()
@@ -140,11 +140,11 @@ export function ApiGetCustomer() {
   );
 }
 
-export function ApiRegisterUser() {
+export function ApiCreateCustomer() {
   return applyDecorators(
-    ApiOperation({ summary: 'Register a user' }),
-    ApiBody({ type: RegisterUserDTO }),
-    ApiResponse({ status: 201, description: 'The user has been registered' }),
+    ApiOperation({ summary: 'Create a customer' }),
+    ApiBody({ type: CreateCustomerDTO }),
+    ApiResponse({ status: 201, description: 'The customer has been created' }),
     ApiCommonErrorResponses(),
   );
 }

@@ -29,7 +29,7 @@ type PersistCustomerDTO = Omit<
 > & { addresses: Prisma.AddressCreateWithoutCustomerInput[] };
 
 @Injectable()
-export class CustomerDataMapper implements DataMapper<
+export class CustomerDataMapper extends DataMapper<
   Customer,
   PersistCustomerDTO | PesistedCustomerEntity
 > {
