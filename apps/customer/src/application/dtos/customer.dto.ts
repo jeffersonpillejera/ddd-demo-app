@@ -22,12 +22,12 @@ export interface CustomerDTO {
   addresses: CustomerAddressDTO[];
 }
 
-export interface RegisterUserDTO {
+export interface CreateCustomerDTO {
   email: string;
   firstName: string;
   lastName: string;
   mobileNumber?: string | null;
-  addresses?: CustomerAddressDTO[];
+  addresses: CustomerAddressDTO[];
   password: string;
   lastIpAddress: string;
 }

@@ -4,7 +4,7 @@ import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
 import { Money } from '@ecore/domain/common/value-objects/money';
 import { User } from './user';
 import { AggregateRoot } from '@ecore/domain/core/aggregate-root';
-import { UserRegisteredEvent } from '../events/user-registered.event';
+import { CustomerCreatedEvent } from '../events/customer-created.event';
 import {
   BadRequestException,
   UnprocessableException,
@@ -100,7 +100,7 @@ export class Customer extends AggregateRoot<CustomerProps> {
     );
 
     if (!id && !createdAt)
-      customer.addDomainEvent(new UserRegisteredEvent(customer));
+      customer.addDomainEvent(new CustomerCreatedEvent(customer));
 
     return customer;
   }
