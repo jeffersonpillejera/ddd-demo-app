@@ -1,5 +1,5 @@
 import type { Config } from 'jest';
-import { config as baseConfig } from './base';
+import { config as baseConfig } from '@ecore/jest-config/base';
 
 export const config = {
   ...baseConfig,
