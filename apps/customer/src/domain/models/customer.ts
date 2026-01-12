@@ -9,6 +9,8 @@ import {
   BadRequestException,
   UnprocessableException,
 } from '@ecore/domain/common/exceptions';
+import { CreditPurchaseApprovedEvent } from '../events/credit-purchase-approved.event';
+import { CreditPurchaseRejectedEvent } from '../events/credit-purchase-rejected.event';
 
 export interface CustomerProps {
   user: User;
@@ -100,8 +102,32 @@ export class Customer extends AggregateRoot<CustomerProps> {
     );
 
     if (!id && !createdAt)
-      customer.addDomainEvent(new CustomerCreatedEvent(customer));
+      customer.addDomainEvent(
+        new CustomerCreatedEvent(
+          customer.id,
+          customer.email,
+          customer.firstName,
+          customer.lastName,
+          customer.creditLimit,
+          customer.addresses ?? [],
+          customer.createdAt ?? new Date(),
+          customer.mobileNumber,
+        ),
+      );
 
     return customer;
+  }
+
+  public creditPurchase(orderId: string, amount: Money): void {
+    if (this.props.creditLimit.value >= amount.value) {
+      this.props.creditLimit = this.props.creditLimit.subtract(amount);
+      this.addDomainEvent(
+        new CreditPurchaseApprovedEvent(this.id.toString(), orderId),
+      );
+    } else {
+      this.addDomainEvent(
+        new CreditPurchaseRejectedEvent(this.id.toString(), orderId),
+      );
+    }
   }
 }

@@ -9,6 +9,7 @@ import {
   PrismaClientExceptionFilter,
 } from '@ecore/exception-filters';
 import { LoggerService } from '@ecore/logger/logger.service';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -62,6 +63,12 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
   const port = envConfigService.server.port ?? 3001;
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.REDIS,
+    options: { ...envConfigService.eventBus },
+  });
+  await app.startAllMicroservices();
   await app.listen(port);
 }
 

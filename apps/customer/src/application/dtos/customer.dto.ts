@@ -13,7 +13,7 @@ export interface CustomerAddressDTO {
 }
 
 export interface CustomerDTO {
-  id: string;
+  customerId: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -30,4 +30,32 @@ export interface CreateCustomerDTO {
   addresses: CustomerAddressDTO[];
   password: string;
   lastIpAddress: string;
+}
+
+export interface CreditPurchaseDTO {
+  customerId: string;
+  orderId: string;
+  grandTotal: MoneyProps;
+}
+
+export interface CustomerCreatedEventDTO {
+  customerId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  creditLimit: MoneyProps;
+  addresses: CustomerAddressDTO[];
+  createdAt: Date;
+  mobileNumber?: string | null;
+}
+
+export interface CreditPurchaseApprovedEventDTO {
+  customerId: string;
+  orderId: string;
+  amount: MoneyProps;
+}
+
+export interface CreditPurchaseRejectedEventDTO {
+  customerId: string;
+  orderId: string;
 }

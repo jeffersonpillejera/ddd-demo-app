@@ -37,7 +37,7 @@ export class CustomerAddress implements CustomerAddressDTO {
 
 export class Customer implements CustomerDTO {
   @ApiProperty({ example: '123' })
-  id: string;
+  customerId: string;
   @ApiProperty({ example: 'john.doe@example.com' })
   email: string;
   @ApiProperty({ example: 'John' })

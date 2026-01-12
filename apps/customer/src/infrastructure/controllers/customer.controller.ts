@@ -19,6 +19,9 @@ import { Customer } from './entities/customer.entity';
 import { CreateCustomerCommand } from '../../application/commands/create-customer.command';
 import type { Request } from 'express';
 import { GetCustomerQuery } from '../../application/queries/get-customer.query';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import type { CreditPurchaseDTO } from '../../application/dtos/customer.dto';
+import { CreditPurchaseCommand } from '../../application/commands/credit-purchase.command';
 
 @ApiController('customer')
 @Controller('customer')
@@ -28,6 +31,8 @@ export class CustomerController {
     private readonly createCustomerCommand: CreateCustomerCommand,
     @Inject(ApplicationProxyModule.GET_CUSTOMER_QUERY)
     private readonly getCustomerQuery: GetCustomerQuery,
+    @Inject(ApplicationProxyModule.CREDIT_PURCHASE_COMMAND)
+    private readonly creditPurchaseCommand: CreditPurchaseCommand,
   ) {}
 
   @Post()
@@ -48,5 +53,10 @@ export class CustomerController {
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Customer | void> {
     return this.getCustomerQuery.execute({ id });
+  }
+
+  @EventPattern('OrderPlacedEvent')
+  async handleOrderPlaced(@Payload() data: CreditPurchaseDTO): Promise<void> {
+    return this.creditPurchaseCommand.execute(data);
   }
 }

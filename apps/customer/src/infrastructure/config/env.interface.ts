@@ -8,7 +8,13 @@ export interface ServerConfig {
   allowedOrigins?: string[];
 }
 
+export interface EventBusConfig {
+  host: string;
+  port: number;
+}
+
 export interface EnvConfig {
   database: DatabaseConfig;
   server: ServerConfig;
+  eventBus: EventBusConfig;
 }

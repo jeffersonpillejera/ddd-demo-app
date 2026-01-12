@@ -23,6 +23,14 @@ class EnvVariables {
   @IsString()
   @IsOptional()
   ALLOWED_ORIGINS: string;
+
+  @IsString()
+  @IsNotEmpty()
+  EVENT_BUS_HOST: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  EVENT_BUS_PORT: number;
 }
 
 export function validate(config: Record<string, unknown>) {
