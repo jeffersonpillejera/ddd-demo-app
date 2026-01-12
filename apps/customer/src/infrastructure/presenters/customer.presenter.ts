@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 export class CustomerPresenter implements Presenter<Customer, CustomerDTO> {
   toDTO(domain: Customer): CustomerDTO {
     return {
-      id: domain.id.toString(),
+      customerId: domain.id.toString(),
       email: domain.email.value,
       firstName: domain.firstName,
       lastName: domain.lastName,

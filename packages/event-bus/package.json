@@ -33,16 +33,17 @@
     }
   },
   "dependencies": {
+    "@ecore/domain": "workspace:*",
     "@nestjs/common": "^11.1.11",
-    "@nestjs/cqrs": "^11.0.3",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.11",
-    "@ecore/domain": "workspace:*"
+    "@nestjs/cqrs": "^11.0.3",
+    "@nestjs/microservices": "^11.1.11"
   },
   "devDependencies": {
-    "@types/node": "^22.15.29",
     "@ecore/eslint-config": "workspace:*",
     "@ecore/typescript-config": "workspace:*",
+    "@types/node": "^22.15.29",
     "eslint": "^9.39.2",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",

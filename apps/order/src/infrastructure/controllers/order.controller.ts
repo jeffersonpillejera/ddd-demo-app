@@ -14,7 +14,12 @@ import { ConfirmOrderCommand } from '../../application/commands/confirm-order.co
 import { ApiGetOrder, ApiPlaceOrder, PlaceOrderDTO } from './dtos/order.dto';
 import { ApiController } from './dtos/common.dto';
 import { GetOrderQuery } from '../../application/queries/get-order.query';
-import { OrderDTO } from '../../application/dtos/order.dto';
+import {
+  type OrderCanceledEventDTO,
+  type OrderConfirmedEventDTO,
+  OrderDTO,
+} from '../../application/dtos/order.dto';
+import { EventPattern, Payload } from '@nestjs/microservices';
 
 @ApiController('order')
 @Controller('order')
@@ -42,13 +47,22 @@ export class OrderController {
     return this.placeOrderCommand.execute(placeOrderDTO);
   }
 
-  @Patch('confirm/:id')
-  async confirmOrder(@Param('id') id: string) {
-    return this.confirmOrderCommand.execute({ orderId: id });
-  }
-
   @Patch('cancel/:id')
   async cancelOrder(@Param('id') id: string) {
     return this.cancelOrderCommand.execute({ orderId: id });
+  }
+
+  @EventPattern('CreditPurchaseApprovedEvent')
+  async handleCreditPurchaseApproved(
+    @Payload() data: OrderConfirmedEventDTO,
+  ): Promise<void> {
+    return this.confirmOrderCommand.execute({ orderId: data.orderId });
+  }
+
+  @EventPattern('CreditPurchaseRejectedEvent')
+  async handleCreditPurchaseRejected(
+    @Payload() data: OrderCanceledEventDTO,
+  ): Promise<void> {
+    return this.cancelOrderCommand.execute({ orderId: data.orderId });
   }
 }
