@@ -7,6 +7,7 @@ import {
   ForbiddenResponseDto,
   NotFoundResponseDto,
 } from '../entities/common.entity';
+import { MoneyProps } from '@ecore/domain/common/value-objects/money';
 
 export function ApiController(apiTag: string) {
   return applyDecorators(ApiTags(apiTag), ApiBearerAuth());
@@ -62,4 +63,15 @@ export function ApiQueryPagination(defaultPage = 1, defaultPageSize = 10) {
       type: 'number',
     }),
   );
+}
+
+export class CreditPurchaseApprovedEventDTO {
+  customerId: string;
+  orderId: string;
+  amount: MoneyProps;
+}
+
+export class CreditPurchaseRejectedEventDTO {
+  customerId: string;
+  orderId: string;
 }
