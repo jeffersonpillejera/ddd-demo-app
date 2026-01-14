@@ -20,6 +20,11 @@
     "prepare": "husky"
   },
   "packageManager": "pnpm@10.24.0",
+  "pnpm": {
+    "overrides": {
+      "hono": ">=4.11.4"
+    }
+  },
   "devDependencies": {
     "@ecore/eslint-config": "workspace:*",
     "@ecore/typescript-config": "workspace:*",

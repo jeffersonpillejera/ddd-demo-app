@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApplicationProxyModule } from '../application-proxy.module';
 import { Inject } from '@nestjs/common';
-import { ApiController } from './dtos/common.dto';
+import { ApiController, OrderPlacedEventDTO } from './dtos/common.dto';
 import {
   ApiGetCustomer,
   CreateCustomerDTO,
@@ -20,7 +20,6 @@ import { CreateCustomerCommand } from '../../application/commands/create-custome
 import type { Request } from 'express';
 import { GetCustomerQuery } from '../../application/queries/get-customer.query';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import type { CreditPurchaseDTO } from '../../application/dtos/customer.dto';
 import { CreditPurchaseCommand } from '../../application/commands/credit-purchase.command';
 
 @ApiController('customer')
@@ -56,7 +55,11 @@ export class CustomerController {
   }
 
   @EventPattern('OrderPlacedEvent')
-  async handleOrderPlaced(@Payload() data: CreditPurchaseDTO): Promise<void> {
-    return this.creditPurchaseCommand.execute(data);
+  async handleOrderPlaced(@Payload() data: OrderPlacedEventDTO): Promise<void> {
+    return this.creditPurchaseCommand.execute({
+      customerId: data.customerId,
+      orderId: data.orderId,
+      grandTotal: data.grandTotal,
+    });
   }
 }
