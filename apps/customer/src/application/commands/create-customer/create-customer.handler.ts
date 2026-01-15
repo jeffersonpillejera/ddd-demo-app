@@ -11,7 +11,6 @@ import {
   Money,
 } from '@ecore/domain/common/value-objects/money';
 import { Password } from '@ecore/domain/common/value-objects/password';
-import { DomainEventBus } from '@ecore/domain/core/domain-event-bus';
 import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
 import { BadRequestException } from '@ecore/domain/common/exceptions';
 import { ILogger } from '@ecore/domain/core/logger';
@@ -21,7 +20,6 @@ import { CreateCustomerCommand } from './create-customer.command';
 export class CreateCustomerHandler implements CommandHandler<CreateCustomerCommand> {
   constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly domainEventBus: DomainEventBus,
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);
@@ -78,7 +76,6 @@ export class CreateCustomerHandler implements CommandHandler<CreateCustomerComma
     });
 
     await this.customerRepository.save(customer);
-    this.domainEventBus.publish(customer);
     this.logger.log(`Customer with email ${email} created successfully`);
   }
 }

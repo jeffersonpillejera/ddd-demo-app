@@ -30,7 +30,7 @@ export class OrderProjectionRebuilder implements ProjectionRebuilder {
       orderDomain = Order.create({ ...orderProps }, orderId);
     } else {
       orderDomain = this.orderMapper.toDomain(existingOrder);
-      orderDomain.rebuild([event]);
+      orderDomain.loadFromHistory([event]);
     }
 
     const { items, ...order } = this.orderMapper.toPersistence(orderDomain);

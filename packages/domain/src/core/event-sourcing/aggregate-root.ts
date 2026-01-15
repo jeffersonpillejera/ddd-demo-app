@@ -9,14 +9,14 @@ export abstract class AggregateRoot<T> extends BaseAggregateRoot<T> {
     return this._version;
   }
 
-  protected addDomainEvent(domainEvent: DomainEvent & Event): void {
-    super.addDomainEvent(domainEvent);
+  protected apply(domainEvent: DomainEvent & Event): void {
+    super.apply(domainEvent);
     this.when(domainEvent);
   }
 
   protected abstract when<T extends Event>(event: T): void;
 
-  public rebuild(events: Event[]): void {
+  public loadFromHistory(events: Event[]): void {
     events
       .sort((a, b) => a.occurredAt.getTime() - b.occurredAt.getTime())
       .forEach((event) => this.when(event));

@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import { OrderPlacedHandler } from './order-placed.handler';
 import { LoggerModule } from '@ecore/logger/logger.module';
-import { OrderConfirmedHandler } from './order-confirmed.handler';
-import { OrderCancelledHandler } from './order-cancelled.handler';
 import { ProjectionStoreModule } from '../projection-store/projection-store.module';
+import { AllOrderEventsHandler } from './all-order-events.handler';
 
 @Module({
   imports: [
@@ -13,6 +11,6 @@ import { ProjectionStoreModule } from '../projection-store/projection-store.modu
       prefix: 'OrderService',
     }),
   ],
-  providers: [OrderPlacedHandler, OrderConfirmedHandler, OrderCancelledHandler],
+  providers: [AllOrderEventsHandler],
 })
 export class SubscribersModule {}

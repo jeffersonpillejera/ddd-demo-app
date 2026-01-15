@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EnvConfigService } from './config/env.service';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { ControllersModule } from './controllers/controller.module';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ControllersModule } from './controllers/controller.module';
       }),
       inject: [EnvConfigService],
     }),
+    CqrsModule.forRoot(),
     SubscribersModule,
     ControllersModule,
   ],

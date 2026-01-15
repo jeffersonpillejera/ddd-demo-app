@@ -70,9 +70,10 @@ async function bootstrap() {
   });
   await app.startAllMicroservices();
   await app.listen(port);
+  process.exitCode = 1;
 }
 
 bootstrap().catch((error) => {
   console.error('Failed to start application:', error);
-  process.exit(1);
+  process.exit(process.exitCode);
 });

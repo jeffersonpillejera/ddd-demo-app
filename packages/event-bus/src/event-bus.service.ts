@@ -18,7 +18,7 @@ export class EventBusService implements DomainEventBus {
     private readonly presenter?: Presenter<DomainEvent, any>,
   ) {}
   publish<T extends AggregateRoot<any>>(aggregateRoot: T): void {
-    aggregateRoot.domainEvents.forEach((domainEvent) => {
+    aggregateRoot.getUncommittedEvents().forEach((domainEvent) => {
       this.eventBus.publish(domainEvent);
       if (this.messageBroker && this.presenter) {
         this.messageBroker.emit(
@@ -27,6 +27,6 @@ export class EventBusService implements DomainEventBus {
         );
       }
     });
-    aggregateRoot.clearDomainEvents();
+    aggregateRoot.uncommit();
   }
 }

@@ -1,5 +1,4 @@
 import { OrderRepository } from '../../../domain/repositories/order.repository';
-import { DomainEventBus } from '@ecore/domain/core/domain-event-bus';
 import { ILogger } from '@ecore/domain/core/logger';
 import { SequenceGenerator } from '@ecore/domain/core/sequence-generator';
 import {
@@ -15,7 +14,6 @@ import { PlaceOrderCommand } from './place-order.command';
 export class PlaceOrderHandler implements CommandHandler<PlaceOrderCommand> {
   constructor(
     private readonly orderRepository: OrderRepository,
-    private readonly domainEventBus: DomainEventBus,
     private readonly sequenceGenerator: SequenceGenerator,
     private readonly logger: ILogger,
   ) {
@@ -60,7 +58,6 @@ export class PlaceOrderHandler implements CommandHandler<PlaceOrderCommand> {
     );
 
     await this.orderRepository.save(order);
-    this.domainEventBus.publish(order);
     this.logger.log(`Order ${orderId.toString()} placed successfully`);
   }
 }

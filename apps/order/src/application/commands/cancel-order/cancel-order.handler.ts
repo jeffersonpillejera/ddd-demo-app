@@ -1,6 +1,5 @@
 import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
 import { OrderRepository } from '../../../domain/repositories/order.repository';
-import { DomainEventBus } from '@ecore/domain/core/domain-event-bus';
 import { ILogger } from '@ecore/domain/core/logger';
 import { NotFoundException } from '@ecore/domain/common/exceptions';
 import { CancelOrderCommand } from './cancel-order.command';
@@ -8,7 +7,6 @@ import { CancelOrderCommand } from './cancel-order.command';
 export class CancelOrderHandler implements CommandHandler<CancelOrderCommand> {
   constructor(
     private readonly orderRepository: OrderRepository,
-    private readonly domainEventBus: DomainEventBus,
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);
@@ -22,7 +20,6 @@ export class CancelOrderHandler implements CommandHandler<CancelOrderCommand> {
     }
     order.cancel();
     await this.orderRepository.save(order);
-    this.domainEventBus.publish(order);
     this.logger.log(`Order ${command.orderId} cancelled successfully`);
   }
 }

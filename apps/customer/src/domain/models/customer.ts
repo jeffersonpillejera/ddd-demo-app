@@ -102,7 +102,7 @@ export class Customer extends AggregateRoot<CustomerProps> {
     );
 
     if (!id && !createdAt)
-      customer.addDomainEvent(
+      customer.apply(
         new CustomerCreatedEvent(
           customer.id,
           customer.email,
@@ -124,13 +124,9 @@ export class Customer extends AggregateRoot<CustomerProps> {
       this.props.creditLimit.isEqualTo(amount)
     ) {
       this.props.creditLimit = this.props.creditLimit.subtract(amount);
-      this.addDomainEvent(
-        new CreditPurchaseApprovedEvent(this.id.toString(), orderId),
-      );
+      this.apply(new CreditPurchaseApprovedEvent(this.id.toString(), orderId));
     } else {
-      this.addDomainEvent(
-        new CreditPurchaseRejectedEvent(this.id.toString(), orderId),
-      );
+      this.apply(new CreditPurchaseRejectedEvent(this.id.toString(), orderId));
     }
   }
 }
