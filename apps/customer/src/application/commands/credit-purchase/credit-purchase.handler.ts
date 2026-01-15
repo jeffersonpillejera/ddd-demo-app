@@ -1,12 +1,12 @@
 import { ILogger } from '@ecore/domain/core/logger';
 import { DomainEventBus } from '@ecore/domain/core/domain-event-bus';
-import { Command } from '@ecore/domain/core/cqrs/command';
-import { CustomerRepository } from '../../domain/repositories/customer.repository';
+import { CustomerRepository } from '../../../domain/repositories/customer.repository';
 import { NotFoundException } from '@ecore/domain/common/exceptions';
-import { CreditPurchaseDTO } from '../dtos/customer.dto';
 import { Money } from '@ecore/domain/common/value-objects/money';
+import { CreditPurchaseCommand } from './credit-purchase.command';
+import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
 
-export class CreditPurchaseCommand implements Command<CreditPurchaseDTO> {
+export class CreditPurchaseHandler implements CommandHandler<CreditPurchaseCommand> {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly domainEventBus: DomainEventBus,
@@ -15,8 +15,8 @@ export class CreditPurchaseCommand implements Command<CreditPurchaseDTO> {
     this.logger.setContext(this.constructor.name);
   }
 
-  async execute(request: CreditPurchaseDTO) {
-    const { customerId, orderId, grandTotal } = request;
+  async execute(command: CreditPurchaseCommand): Promise<void> {
+    const { customerId, orderId, grandTotal } = command.creditPurchaseDTO;
     const customer = await this.customerRepository.findById(customerId);
     if (!customer) {
       throw new NotFoundException(`Customer ${customerId} not found`);

@@ -1,5 +1,4 @@
-import { Command } from '@ecore/domain/core/cqrs/command';
-import { OrderRepository } from '../../domain/repositories/order.repository';
+import { OrderRepository } from '../../../domain/repositories/order.repository';
 import { DomainEventBus } from '@ecore/domain/core/domain-event-bus';
 import { ILogger } from '@ecore/domain/core/logger';
 import { SequenceGenerator } from '@ecore/domain/core/sequence-generator';
@@ -7,23 +6,26 @@ import {
   Order,
   ORDER_ID_PREFIX,
   ORDER_STATUS,
-} from '../../domain/models/order';
-import { OrderItem } from '../../domain/models/order-item';
+} from '../../../domain/models/order';
+import { OrderItem } from '../../../domain/models/order-item';
 import { Money } from '@ecore/domain/common/value-objects/money';
-import { PlaceOrderDTO } from '../dtos/order.dto';
+import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
+import { PlaceOrderCommand } from './place-order.command';
 
-export class PlaceOrderCommand implements Command<PlaceOrderDTO> {
+export class PlaceOrderHandler implements CommandHandler<PlaceOrderCommand> {
   constructor(
     private readonly orderRepository: OrderRepository,
     private readonly domainEventBus: DomainEventBus,
     private readonly sequenceGenerator: SequenceGenerator,
     private readonly logger: ILogger,
   ) {
-    this.logger.setContext(PlaceOrderCommand.name);
+    this.logger.setContext(this.constructor.name);
   }
 
-  async execute(request: PlaceOrderDTO): Promise<void> {
-    this.logger.log(`Placing order for customer ${request.customerId}`);
+  async execute(command: PlaceOrderCommand): Promise<void> {
+    this.logger.log(
+      `Placing order for customer ${command.placeOrderDTO.customerId}`,
+    );
 
     const {
       customerId,
@@ -33,7 +35,7 @@ export class PlaceOrderCommand implements Command<PlaceOrderDTO> {
       grandTotal,
       currency,
       items,
-    } = request;
+    } = command.placeOrderDTO;
 
     const orderId = await this.sequenceGenerator.generateId(ORDER_ID_PREFIX);
 

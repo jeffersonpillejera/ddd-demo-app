@@ -119,7 +119,10 @@ export class Customer extends AggregateRoot<CustomerProps> {
   }
 
   public creditPurchase(orderId: string, amount: Money): void {
-    if (this.props.creditLimit.value >= amount.value) {
+    if (
+      this.props.creditLimit.isGreaterThan(amount) ||
+      this.props.creditLimit.isEqualTo(amount)
+    ) {
       this.props.creditLimit = this.props.creditLimit.subtract(amount);
       this.addDomainEvent(
         new CreditPurchaseApprovedEvent(this.id.toString(), orderId),

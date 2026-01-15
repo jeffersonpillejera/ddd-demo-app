@@ -1,7 +1,6 @@
-import { Command } from '@ecore/domain/core/cqrs/command';
-import { Customer } from '../../domain/models/customer';
-import { CustomerRepository } from '../../domain/repositories/customer.repository';
-import { User } from '../../domain/models/user';
+import { Customer } from '../../../domain/models/customer';
+import { CustomerRepository } from '../../../domain/repositories/customer.repository';
+import { User } from '../../../domain/models/user';
 import {
   Address,
   CountryCodeEnum,
@@ -16,9 +15,10 @@ import { DomainEventBus } from '@ecore/domain/core/domain-event-bus';
 import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
 import { BadRequestException } from '@ecore/domain/common/exceptions';
 import { ILogger } from '@ecore/domain/core/logger';
-import { CreateCustomerDTO } from '../dtos/customer.dto';
+import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
+import { CreateCustomerCommand } from './create-customer.command';
 
-export class CreateCustomerCommand implements Command<CreateCustomerDTO> {
+export class CreateCustomerHandler implements CommandHandler<CreateCustomerCommand> {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly domainEventBus: DomainEventBus,
@@ -27,8 +27,10 @@ export class CreateCustomerCommand implements Command<CreateCustomerDTO> {
     this.logger.setContext(this.constructor.name);
   }
 
-  async execute(request: CreateCustomerDTO) {
-    this.logger.log(`Creating customer with email ${request.email}`);
+  async execute(command: CreateCustomerCommand): Promise<void> {
+    this.logger.log(
+      `Creating customer with email ${command.createCustomerDTO.email}`,
+    );
 
     const {
       email,
@@ -38,7 +40,7 @@ export class CreateCustomerCommand implements Command<CreateCustomerDTO> {
       addresses,
       password,
       lastIpAddress,
-    } = request;
+    } = command.createCustomerDTO;
     const emailAddress = EmailAddress.create(email);
 
     let customer = await this.customerRepository.findByEmail(emailAddress);
