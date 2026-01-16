@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "@ecore/domain": "workspace:*",
-    "@ecore/event-bus": "workspace:*",
     "@ecore/exception-filters": "workspace:*",
     "@ecore/http": "workspace:*",
     "@ecore/logger": "workspace:*",

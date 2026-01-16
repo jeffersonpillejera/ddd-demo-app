@@ -1,6 +1,6 @@
-import { Event } from './event';
+import { DomainEvent } from '../domain-event';
 
 export interface ProjectionRebuilder {
-  rebuild(event: Event): Promise<void> | void;
+  rebuild(event: DomainEvent): Promise<void> | void;
   rebuildAll(): Promise<void> | void;
 }

@@ -4,7 +4,7 @@ import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
 import { Money } from '@ecore/domain/common/value-objects/money';
 import { Address } from '@ecore/domain/common/value-objects/address';
 
-export class CustomerCreatedEvent implements DomainEvent {
+export class CustomerCreatedEvent extends DomainEvent {
   constructor(
     public readonly customerId: UniqueIdentifier,
     public readonly email: EmailAddress,
@@ -14,5 +14,7 @@ export class CustomerCreatedEvent implements DomainEvent {
     public readonly addresses: Address[] | null,
     public readonly createdAt: Date,
     public readonly mobileNumber?: string | null,
-  ) {}
+  ) {
+    super();
+  }
 }

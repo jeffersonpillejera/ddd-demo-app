@@ -1,11 +1,10 @@
 import { Money } from '@ecore/domain/common/value-objects/money';
 import { DomainEvent } from '@ecore/domain/core/domain-event';
-import { Event } from '@ecore/domain/core/event-sourcing/event';
 import { OrderItem } from '../models/order-item';
 import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
 import { ORDER_STATUS } from '../models/order';
 
-export class OrderPlacedEvent extends Event implements DomainEvent {
+export class OrderPlacedEvent extends DomainEvent {
   constructor(
     public readonly orderId: UniqueIdentifier,
     public readonly status: ORDER_STATUS,

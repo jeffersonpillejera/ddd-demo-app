@@ -5,6 +5,7 @@ import { Order, OrderEvents } from '../../domain/models/order';
 import { OrderEventsDataMapper } from '../data-mappers/order-events.data-mapper';
 import { OrderPlacedEvent } from '../../domain/events/order-placed.event';
 import { OrderSnapshotStore } from '../snapshot-store/order.snapshot-store';
+import { EventBus } from '@nestjs/cqrs';
 
 @Injectable()
 export class OrderRepository implements DomainOrderRepository {
@@ -12,16 +13,22 @@ export class OrderRepository implements DomainOrderRepository {
     private readonly eventStore: EventStore,
     private readonly orderEventsDataMapper: OrderEventsDataMapper,
     private readonly orderSnapshotStore: OrderSnapshotStore,
+    private readonly eventBus: EventBus,
   ) {}
 
   async save(order: Order): Promise<Order> {
     await this.eventStore.save(
       order.id.toString(),
-      order.domainEvents.map((event) =>
-        this.orderEventsDataMapper.toPersistence(event as OrderEvents),
-      ),
-      (order.version ?? 0) - order.domainEvents.length,
+      order
+        .getUncommittedEvents()
+        .map((event) =>
+          this.orderEventsDataMapper.toPersistence(event as OrderEvents),
+        ),
+      (order.version ?? 0) - order.getUncommittedEvents().length,
     );
+
+    this.eventBus.publishAll(order.getUncommittedEvents());
+    order.uncommit();
 
     // Save a snapshot every 10 events.
     if (order.version % 10 === 0) {
@@ -62,8 +69,8 @@ export class OrderRepository implements DomainOrderRepository {
       order = Order.create({ ...orderProps }, orderId);
     }
 
-    // Rebuild the order from the events
-    order.rebuild(
+    // Load the order from the events
+    order.loadFromHistory(
       events.map((event) => this.orderEventsDataMapper.toDomain(event)),
     );
     return order;

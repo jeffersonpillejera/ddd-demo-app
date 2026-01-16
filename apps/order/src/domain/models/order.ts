@@ -9,11 +9,16 @@ import { OrderItem } from './order-item';
 import { OrderPlacedEvent } from '../events/order-placed.event';
 import { OrderConfirmedEvent } from '../events/order-confirmed.event';
 import { OrderCancelledEvent } from '../events/order-cancelled.event';
-import { Event } from '@ecore/domain/core/event-sourcing/event';
+import { DomainEvent } from '@ecore/domain/core/domain-event';
 export type OrderEvents =
   | OrderPlacedEvent
   | OrderConfirmedEvent
   | OrderCancelledEvent;
+export const ORDER_EVENTS = [
+  OrderPlacedEvent.name,
+  OrderConfirmedEvent.name,
+  OrderCancelledEvent.name,
+];
 export const ORDER_ID_PREFIX = 'O';
 export const ORDER_ID_LENGTH = 18;
 export enum ORDER_STATUS {
@@ -184,7 +189,7 @@ export class Order extends AggregateRoot<OrderProps> {
     );
 
     if (!createdAt && status === ORDER_STATUS.PENDING)
-      order.addDomainEvent(
+      order.apply(
         new OrderPlacedEvent(
           id,
           status,
@@ -230,7 +235,7 @@ export class Order extends AggregateRoot<OrderProps> {
     ) {
       throw new BadRequestException('Order cannot be cancelled');
     }
-    this.addDomainEvent(
+    this.apply(
       new OrderCancelledEvent(
         this.id,
         ORDER_STATUS.CANCELLED,
@@ -247,7 +252,7 @@ export class Order extends AggregateRoot<OrderProps> {
     if (this.props.status !== ORDER_STATUS.PENDING) {
       throw new BadRequestException('You can only confirm pending orders');
     }
-    this.addDomainEvent(
+    this.apply(
       new OrderConfirmedEvent(
         this.id,
         ORDER_STATUS.CONFIRMED,
@@ -257,7 +262,7 @@ export class Order extends AggregateRoot<OrderProps> {
     );
   }
 
-  protected when(event: Event): void {
+  protected when(event: DomainEvent): void {
     switch (event.type) {
       case OrderPlacedEvent.name: {
         const order = event as OrderPlacedEvent;

@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common';
 import { OrderController } from './order.controller';
-import { ApplicationProxyModule } from '../application-proxy.module';
+import { ApplicationProxyModule } from '../application-proxy/application-proxy.module';
 
-@Module({
-  imports: [ApplicationProxyModule.register()],
-  controllers: [OrderController],
-})
+@Module({ imports: [ApplicationProxyModule], controllers: [OrderController] })
 export class ControllersModule {}

@@ -4,12 +4,14 @@ import { Customer } from '../../domain/models/customer';
 import { Injectable } from '@nestjs/common';
 import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
 import { CustomerDataMapper } from '../data-mappers/customer.data-mapper';
+import { EventBus } from '@nestjs/cqrs';
 
 @Injectable()
 export class CustomerRepository implements DomainCustomerRepository {
   constructor(
     private readonly persistenceService: PersistenceService,
     private readonly customerDataMapper: CustomerDataMapper,
+    private readonly eventBus: EventBus,
   ) {}
 
   async findByEmail(email: EmailAddress): Promise<Customer | null> {
@@ -53,6 +55,9 @@ export class CustomerRepository implements DomainCustomerRepository {
       },
       include: { user: true, addresses: true },
     });
-    return this.customerDataMapper.toDomain(persistedCustomer);
+    const persistedDomain = this.customerDataMapper.toDomain(persistedCustomer);
+    this.eventBus.publishAll(domain.getUncommittedEvents());
+    domain.uncommit();
+    return persistedDomain;
   }
 }

@@ -4,10 +4,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EnvConfigService } from './config/env.service';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { ControllersModule } from './controllers/controller.module';
+import { EventPublisherModule } from './event-publisher/event-publisher.module';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
   imports: [
     EnvConfigModule,
+    CqrsModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [EnvConfigModule],
       useFactory: (envConfigService: EnvConfigService) => ({
@@ -17,6 +20,7 @@ import { ControllersModule } from './controllers/controller.module';
     }),
     SubscribersModule,
     ControllersModule,
+    EventPublisherModule,
   ],
 })
 export class AppModule {}

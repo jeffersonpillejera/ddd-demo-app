@@ -48,7 +48,7 @@ export class CustomerEventPresenter implements Presenter<
           domain as unknown as CreditPurchaseApprovedEvent;
         return {
           customerId: creditPurchaseApprovedEvent.customerId.toString(),
-          orderId: creditPurchaseApprovedEvent.orderId.toString(),
+          orderId: creditPurchaseApprovedEvent.orderId,
         };
       }
       case CreditPurchaseRejectedEvent.name: {
@@ -56,7 +56,7 @@ export class CustomerEventPresenter implements Presenter<
           domain as unknown as CreditPurchaseRejectedEvent;
         return {
           customerId: creditPurchaseRejectedEvent.customerId.toString(),
-          orderId: creditPurchaseRejectedEvent.orderId.toString(),
+          orderId: creditPurchaseRejectedEvent.orderId,
         };
       }
       default:

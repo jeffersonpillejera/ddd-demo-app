@@ -93,6 +93,30 @@ export class Money extends ValueObject<MoneyProps> {
     });
   }
 
+  public isGreaterThan(comparator: Money | number): boolean {
+    if (typeof comparator === 'number') {
+      return this.props.amount > comparator;
+    }
+    if (this.props.currency !== comparator.props.currency) {
+      throw new BadRequestException(
+        'Cannot compare money with different currencies',
+      );
+    }
+    return this.props.amount > comparator.props.amount;
+  }
+
+  public isLessThan(comparator: Money | number): boolean {
+    if (typeof comparator === 'number') {
+      return this.props.amount < comparator;
+    }
+    if (this.props.currency !== comparator.props.currency) {
+      throw new BadRequestException(
+        'Cannot compare money with different currencies',
+      );
+    }
+    return this.props.amount < comparator.props.amount;
+  }
+
   public static create({ amount, currency }: MoneyProps): Money {
     if (amount === undefined || amount === null || isNaN(amount)) {
       throw new BadRequestException('Amount must be a number');

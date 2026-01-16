@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CustomerCreatedHandler } from './customer-created.handler';
 import { LoggerModule } from '@ecore/logger/logger.module';
+import { AllCustomerEventsHandler } from './all-customer-events.handler';
 
 @Module({
   imports: [
@@ -9,6 +9,6 @@ import { LoggerModule } from '@ecore/logger/logger.module';
       prefix: 'CustomerService',
     }),
   ],
-  providers: [CustomerCreatedHandler],
+  providers: [AllCustomerEventsHandler],
 })
 export class SubscribersModule {}
