@@ -11,6 +11,15 @@ import {
 } from '@ecore/domain/common/exceptions';
 import { CreditPurchaseApprovedEvent } from '../events/credit-purchase-approved.event';
 import { CreditPurchaseRejectedEvent } from '../events/credit-purchase-rejected.event';
+export type CustomerEvents =
+  | CustomerCreatedEvent
+  | CreditPurchaseApprovedEvent
+  | CreditPurchaseRejectedEvent;
+export const CUSTOMER_EVENTS = [
+  CustomerCreatedEvent.name,
+  CreditPurchaseApprovedEvent.name,
+  CreditPurchaseRejectedEvent.name,
+];
 
 export interface CustomerProps {
   user: User;
@@ -124,9 +133,9 @@ export class Customer extends AggregateRoot<CustomerProps> {
       this.props.creditLimit.isEqualTo(amount)
     ) {
       this.props.creditLimit = this.props.creditLimit.subtract(amount);
-      this.apply(new CreditPurchaseApprovedEvent(this.id.toString(), orderId));
+      this.apply(new CreditPurchaseApprovedEvent(this.id, orderId));
     } else {
-      this.apply(new CreditPurchaseRejectedEvent(this.id.toString(), orderId));
+      this.apply(new CreditPurchaseRejectedEvent(this.id, orderId));
     }
   }
 }

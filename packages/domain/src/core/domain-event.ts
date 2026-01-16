@@ -1,1 +1,8 @@
-export type DomainEvent = object;
+export abstract class DomainEvent {
+  public id: string = crypto.randomUUID();
+  public occurredAt: Date = new Date();
+  public type: string = this.constructor.name;
+  public version: number;
+  public correlationId?: string;
+  public causationId?: string;
+}

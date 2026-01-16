@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { Event as IEvent } from '@ecore/domain/core/event-sourcing/event';
+import { DomainEvent } from '@ecore/domain/core/domain-event';
 import type {
   OrderConfirmedEventDTO,
   OrderCanceledEventDTO,
@@ -10,7 +10,7 @@ import type {
 export type EventDocument = HydratedDocument<EventEntity>;
 
 @Schema({ collection: 'events' })
-export class EventEntity implements IEvent {
+export class EventEntity implements DomainEvent {
   @Prop({ required: true })
   id: string;
 

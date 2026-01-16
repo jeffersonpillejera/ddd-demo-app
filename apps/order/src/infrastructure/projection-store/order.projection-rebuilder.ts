@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { OrderDataMapper } from '../data-mappers/order.data-mapper';
 import { EventStore } from '../event-store/event-store';
 import { Order } from '../../domain/models/order';
-import { Event } from '@ecore/domain/core/event-sourcing/event';
 import { OrderPlacedEvent } from '../../domain/events/order-placed.event';
 import { OrderEvents } from '../../domain/models/order';
 

@@ -1,8 +1,11 @@
 import { DomainEvent } from '@ecore/domain/core/domain-event';
+import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
 
-export class CreditPurchaseApprovedEvent implements DomainEvent {
+export class CreditPurchaseApprovedEvent extends DomainEvent {
   constructor(
-    public readonly customerId: string,
+    public readonly customerId: UniqueIdentifier,
     public readonly orderId: string,
-  ) {}
+  ) {
+    super();
+  }
 }
