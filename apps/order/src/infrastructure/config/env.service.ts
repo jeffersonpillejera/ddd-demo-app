@@ -4,14 +4,14 @@ import {
   EnvConfig,
   DatabaseConfig,
   ServerConfig,
-  EventBusConfig,
+  RedisConfig,
 } from './env.interface';
 
 @Injectable()
 export class EnvConfigService implements EnvConfig {
   readonly database: DatabaseConfig;
   readonly server: ServerConfig;
-  readonly eventBus: EventBusConfig;
+  readonly redis: RedisConfig;
 
   constructor(private readonly configService: ConfigService) {
     this.database = {
@@ -28,9 +28,9 @@ export class EnvConfigService implements EnvConfig {
         configService.get<string>('ALLOWED_ORIGINS')?.split(',') ?? [],
     };
 
-    this.eventBus = {
-      host: configService.get<string>('EVENT_BUS_HOST')!,
-      port: configService.get<number>('EVENT_BUS_PORT')!,
+    this.redis = {
+      host: configService.get<string>('REDIS_HOST')!,
+      port: configService.get<number>('REDIS_PORT')!,
     };
   }
 }

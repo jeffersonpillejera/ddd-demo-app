@@ -66,7 +66,7 @@ async function bootstrap() {
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.REDIS,
-    options: { ...envConfigService.eventBus },
+    options: { ...envConfigService.redis },
   });
   await app.startAllMicroservices();
   await app.listen(port);

@@ -9,7 +9,7 @@ export interface ServerConfig {
   allowedOrigins?: string[];
 }
 
-export interface EventBusConfig {
+export interface RedisConfig {
   host: string;
   port: number;
 }
@@ -17,5 +17,5 @@ export interface EventBusConfig {
 export interface EnvConfig {
   database: DatabaseConfig;
   server: ServerConfig;
-  eventBus: EventBusConfig;
+  redis: RedisConfig;
 }
