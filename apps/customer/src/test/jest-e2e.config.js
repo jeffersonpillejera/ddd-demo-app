@@ -1,0 +1,31 @@
+module.exports = {
+  preset: 'ts-jest',
+  moduleFileExtensions: ['js', 'json', 'ts'],
+  rootDir: '.',
+  testEnvironment: 'node',
+  testRegex: '.e2e-spec.ts$',
+  transform: {
+    '^.+\\.(t|j)s$': [
+      'ts-jest',
+      {
+        tsconfig: {
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+          module: 'commonjs',
+        },
+        isolatedModules: false,
+      },
+    ],
+  },
+  moduleNameMapper: {
+    '^@ecore/domain/(.*)$': '<rootDir>/../../../../packages/domain/src/$1',
+    '^@ecore/logger/(.*)$': '<rootDir>/../../../../packages/logger/src/$1',
+    '^@ecore/event-publisher/(.*)$':
+      '<rootDir>/../../../../packages/event-publisher/src/$1',
+    '^@ecore/exception-filters/(.*)$':
+      '<rootDir>/../../../../packages/exception-filters/src/$1',
+    '^@ecore/(.*)$': '<rootDir>/../../../../packages/$1/src',
+  },
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  transformIgnorePatterns: ['node_modules/(?!(@prisma|@prisma/client))'],
+};
