@@ -27,6 +27,7 @@
     "@ecore/http": "workspace:*",
     "@ecore/logger": "workspace:*",
     "@ecore/utils": "workspace:*",
+    "@ecore/event-publisher": "workspace:*",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.1.11",
     "@nestjs/config": "^4.0.2",

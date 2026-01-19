@@ -35,6 +35,9 @@ importers:
       '@ecore/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@ecore/event-publisher':
+        specifier: workspace:*
+        version: link:../../packages/event-publisher
       '@ecore/exception-filters':
         specifier: workspace:*
         version: link:../../packages/exception-filters
@@ -243,6 +246,9 @@ importers:
       '@ecore/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@ecore/event-publisher':
+        specifier: workspace:*
+        version: link:../../packages/event-publisher
       '@ecore/exception-filters':
         specifier: workspace:*
         version: link:../../packages/exception-filters
@@ -581,6 +587,12 @@ importers:
       '@nestjs/microservices':
         specifier: ^11.1.11
         version: 11.1.11(@nestjs/common@11.1.11(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.11)(@nestjs/websockets@11.1.11)(amqp-connection-manager@5.0.0(amqplib@0.10.9))(amqplib@0.10.9)(ioredis@5.9.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.3
+        version: 0.14.3
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2

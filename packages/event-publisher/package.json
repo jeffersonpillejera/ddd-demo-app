@@ -1,0 +1,56 @@
+{
+  "name": "@ecore/event-publisher",
+  "version": "0.0.1",
+  "description": "An event publisher for publishing domain events to Redis",
+  "private": true,
+  "author": "Jefferson Pillejera <jefferson.pillejera@gmail.com>",
+  "license": "MIT",
+  "main": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist/**"
+  ],
+  "scripts": {
+    "dev": "pnpm build --watch",
+    "build": "tsc -b -v",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.js"
+    }
+  },
+  "dependencies": {
+    "@ecore/domain": "workspace:*",
+    "@nestjs/common": "^11.1.11",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.11",
+    "@nestjs/cqrs": "^11.0.3",
+    "@nestjs/microservices": "^11.1.11",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@ecore/eslint-config": "workspace:*",
+    "@ecore/typescript-config": "workspace:*",
+    "@types/node": "^22.15.29",
+    "eslint": "^9.39.2",
+    "ts-loader": "^9.5.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.52.0"
+  }
+}

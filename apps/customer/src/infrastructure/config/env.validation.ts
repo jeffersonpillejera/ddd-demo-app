@@ -26,11 +26,11 @@ class EnvVariables {
 
   @IsString()
   @IsNotEmpty()
-  EVENT_BUS_HOST: string;
+  REDIS_HOST: string;
 
   @IsNumber()
   @IsNotEmpty()
-  EVENT_BUS_PORT: number;
+  REDIS_PORT: number;
 }
 
 export function validate(config: Record<string, unknown>) {
