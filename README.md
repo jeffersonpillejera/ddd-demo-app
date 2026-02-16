@@ -1,6 +1,6 @@
 # E-commerce Core
 
-A microservice-based e-commerce system built in a [Monorepo](https://www.atlassian.com/git/tutorials/monorepos), with a strong emphasis on **Domain Driven Design (DDD)**—both strategic and tactical. The project uses multiple bounded contexts (services) and shared domain building blocks to provide e-commerce management functionality.
+A **demo app** that illustrates **Domain Driven Design (DDD)**—both strategic and tactical—and **Clean Architecture** throughout a [monorepo](https://www.atlassian.com/git/tutorials/monorepos) with microservice-style bounded contexts. It is **not** a comprehensive, production-ready e-commerce platform; it focuses on structure, patterns, and clarity. The codebase follows Clean Architecture in every app (domain → application → infrastructure, dependency rule, application proxy). E-commerce is used as the domain because it is one of the best examples for an enterprise project: rich aggregates, clear bounded contexts (customer, order, etc.), event-driven integration, and real-world complexity without overwhelming scope.
 
 ## What's inside?
 
