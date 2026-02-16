@@ -37,7 +37,7 @@
     "@nestjs/common": "^11.1.11",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.11",
-    "axios": "^1.13.2"
+    "axios": "^1.13.5"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",
