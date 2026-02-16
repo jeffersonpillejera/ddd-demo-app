@@ -29,6 +29,24 @@ Each package and application is 100% [TypeScript](https://www.typescriptlang.org
 
 ---
 
+## Why a monorepo (Turborepo) for microservice-style backends?
+
+Using a monorepo with [Turborepo](https://turborepo.com) for a microservice-style backend brings several benefits that align well with DDD and Clean Architecture:
+
+- **Shared code without publishing** — Common domain primitives (`@ecore/domain`), event bus, logger, and config live in `packages/` and are consumed via `workspace:*`. Every app stays on the same version; there are no separate npm packages to version and publish. Refactors to shared code are reflected across all services in one commit.
+
+- **Atomic changes across services** — When a domain event shape or shared interface changes, you can update the producer app, the consumer app, and the shared package in a single pull request. No “release library first, then update consumers” dance. This reduces integration bugs and makes cross-context evolution easier.
+
+- **Consistent tooling and scripts** — ESLint, TypeScript, Jest, and Prettier are shared. You run `pnpm run build`, `pnpm run test`, or `pnpm run lint` from the root and Turborepo runs the right tasks for each app and package, with caching so only what changed is rebuilt or retested.
+
+- **Single clone, one CI pipeline** — Developers clone one repo and have every service and shared package. CI can run tests and builds for the whole workspace, with dependency-aware task ordering (e.g. build `@ecore/domain` before building apps that depend on it). No need to coordinate multiple repos or duplicate CI configs.
+
+- **Clear boundaries without separate repos** — Each app under `apps/` is still a bounded context (a logical “microservice”). You get clear service boundaries and the option to deploy or scale services independently later, without the overhead of many repositories and duplicated tooling.
+
+In short: a Turborepo monorepo gives you **shared code, atomic refactors, and one pipeline** while keeping **service boundaries explicit**. That makes it a strong fit for a microservice-style backend where services share domain and infrastructure concepts but remain independently deployable.
+
+---
+
 ## Domain Driven Design in This Project
 
 ### Strategic DDD
