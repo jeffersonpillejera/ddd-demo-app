@@ -1,8 +1,11 @@
 import { PersistenceService } from '../persistence/persistence.service';
-import { CustomerRepository as DomainCustomerRepository } from '../../domain/repositories/customer.repository';
+import {
+  CustomerFilter,
+  type ICustomerRepository as DomainCustomerRepository,
+} from '../../domain/repositories/customer.repository';
 import { Customer } from '../../domain/models/customer';
 import { Injectable } from '@nestjs/common';
-import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
+import { EmailAddress } from '@ecore/core/common/value-objects/email-address';
 import { CustomerDataMapper } from '../data-mappers/customer.data-mapper';
 import { EventBus } from '@nestjs/cqrs';
 
@@ -32,6 +35,20 @@ export class CustomerRepository implements DomainCustomerRepository {
 
     if (!customer) return null;
     return this.customerDataMapper.toDomain(customer);
+  }
+
+  async findMany(filter?: CustomerFilter): Promise<Customer[]> {
+    const customers = await this.persistenceService.customer.findMany({
+      where: {
+        ...filter,
+        ...(filter?.firstName && { firstName: { contains: filter.firstName } }),
+        ...(filter?.lastName && { lastName: { contains: filter.lastName } }),
+      },
+      include: { user: true, addresses: true },
+    });
+    return customers.map((customer) =>
+      this.customerDataMapper.toDomain(customer),
+    );
   }
 
   async save(domain: Customer): Promise<Customer> {

@@ -1,5 +1,5 @@
 import { ConsoleLogger, Scope } from '@nestjs/common';
-import { ILogger } from '@ecore/domain/core/logger';
+import { type ILogger } from '@ecore/core/logger';
 import { Injectable } from '@nestjs/common';
 
 @Injectable({ scope: Scope.TRANSIENT })

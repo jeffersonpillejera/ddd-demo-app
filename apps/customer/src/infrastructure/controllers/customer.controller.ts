@@ -7,20 +7,16 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { ApiController, OrderPlacedEventDTO } from './dtos/common.dto';
-import {
-  ApiGetCustomer,
-  CreateCustomerDTO,
-  ApiCreateCustomer,
-} from './dtos/customer.dto';
-import { Customer } from './entities/customer.entity';
+import { ApiController } from '@ecore/common/swagger/controller.swagger';
+import { OrderPlacedEventDTO } from '@ecore/common/dto/order.dto';
 import { CreateCustomerCommand } from '../../application/commands/create-customer/create-customer.command';
 import type { Request } from 'express';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreditPurchaseCommand } from '../../application/commands/credit-purchase/credit-purchase.command';
 import { GetCustomerQuery } from '../../application/queries/get-customer/get-customer.query';
-import { CustomerDTO } from '../../application/dtos/customer.dto';
+import { ApiCreateCustomer, ApiGetCustomer } from './customer.swagger';
+import { CreateCustomerDTO, CustomerDTO } from '../presenters/customer.dto';
 
 @ApiController('customer')
 @Controller('customer')
@@ -46,9 +42,7 @@ export class CustomerController {
 
   @Get(':id')
   @ApiGetCustomer()
-  async getCustomer(
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<Customer | void> {
+  async getCustomer(@Param('id', ParseUUIDPipe) id: string) {
     return this.queryBus.execute<GetCustomerQuery, CustomerDTO>(
       new GetCustomerQuery(id),
     );
@@ -57,7 +51,7 @@ export class CustomerController {
   @EventPattern('OrderPlacedEvent')
   async handleOrderPlaced(
     @Payload() { customerId, orderId, grandTotal }: OrderPlacedEventDTO,
-  ): Promise<void> {
+  ) {
     return this.commandBus.execute<CreditPurchaseCommand, Promise<void>>(
       new CreditPurchaseCommand({ customerId, orderId, grandTotal }),
     );

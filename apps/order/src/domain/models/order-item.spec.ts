@@ -1,10 +1,10 @@
 import { OrderItem, OrderItemProps } from './order-item';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 import {
   Money,
   CurrencyCodeEnum,
-} from '@ecore/domain/common/value-objects/money';
-import { BadRequestException } from '@ecore/domain/common/exceptions';
+} from '@ecore/core/common/value-objects/money';
+import { BadRequestException } from '@ecore/core/common/exceptions';
 
 describe('OrderItem', () => {
   let mockUnitPrice: Money;

@@ -2,8 +2,13 @@
   "$schema": "https://turborepo.com/schema.json",
   "globalEnv": [
     "NODE_ENV",
+    "DATABASE_URL",
     "DATABASE_PROJECTION_STORE_URL",
-    "DATABASE_EVENT_STORE_URL"
+    "DATABASE_EVENT_STORE_URL",
+    "REDIS_HOST",
+    "REDIS_PORT",
+    "EVENT_PUBLISHER_HOST",
+    "EVENT_PUBLISHER_PORT"
   ],
   "globalDependencies": [
     "**/.env",
@@ -33,11 +38,7 @@
         "build/**",
         "lib/**"
       ],
-      "env": [
-        "NODE_ENV",
-        "DATABASE_PROJECTION_STORE_URL",
-        "DATABASE_EVENT_STORE_URL"
-      ]
+      "env": ["NODE_ENV"]
     },
     "dev": { "cache": false, "persistent": true, "dependsOn": ["^build"] },
     "lint": {
@@ -91,8 +92,12 @@
       "outputs": ["test-results/**", "coverage/**"],
       "env": [
         "NODE_ENV",
+        "PORT",
+        "DATABASE_URL",
         "DATABASE_PROJECTION_STORE_URL",
-        "DATABASE_EVENT_STORE_URL"
+        "DATABASE_EVENT_STORE_URL",
+        "REDIS_HOST",
+        "REDIS_PORT"
       ]
     },
     "test:debug": { "cache": false, "dependsOn": ["^build"] },

@@ -76,3 +76,4 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 specs/*
 .specstory/*
 db_dump
+*.tsbuildinfo

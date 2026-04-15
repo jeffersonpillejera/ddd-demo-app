@@ -1,4 +1,4 @@
-import { EventStore as IEventStore } from '@ecore/domain/core/event-sourcing/event-store';
+import { EventStore as IEventStore } from '@ecore/core/event-sourcing/event-store';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { EventEntity } from './event.schema';

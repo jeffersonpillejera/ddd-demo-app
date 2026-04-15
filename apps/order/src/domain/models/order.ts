@@ -1,15 +1,15 @@
-import { Money } from '@ecore/domain/common/value-objects/money';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
-import { AggregateRoot } from '@ecore/domain/core/event-sourcing/aggregate-root';
+import { Money } from '@ecore/core/common/value-objects/money';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
+import { AggregateRoot } from '@ecore/core/event-sourcing/aggregate-root';
 import {
   BadRequestException,
   UnprocessableException,
-} from '@ecore/domain/common/exceptions';
+} from '@ecore/core/common/exceptions';
 import { OrderItem } from './order-item';
 import { OrderPlacedEvent } from '../events/order-placed.event';
 import { OrderConfirmedEvent } from '../events/order-confirmed.event';
 import { OrderCancelledEvent } from '../events/order-cancelled.event';
-import { DomainEvent } from '@ecore/domain/core/domain-event';
+import { DomainEvent } from '@ecore/core/domain-event';
 export type OrderEvents =
   | OrderPlacedEvent
   | OrderConfirmedEvent
@@ -30,6 +30,8 @@ export enum ORDER_STATUS {
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
 }
+
+export const ORDER_PRESENTER = Symbol('ORDER_PRESENTER');
 
 export interface OrderProps {
   status: ORDER_STATUS;
@@ -144,6 +146,13 @@ export class Order extends AggregateRoot<OrderProps> {
     }
     if (!items || items.length === 0) {
       throw new BadRequestException('Items are required');
+    }
+    if (
+      discount.isGreaterThan(
+        Money.create({ amount: 0, currency: discount.props.currency }),
+      )
+    ) {
+      throw new BadRequestException('Discount must be a negative value');
     }
     if (
       !subTotal.isEqualTo(

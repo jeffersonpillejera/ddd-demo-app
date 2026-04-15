@@ -1,14 +1,14 @@
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
-import { Address } from '@ecore/domain/common/value-objects/address';
-import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
-import { Money } from '@ecore/domain/common/value-objects/money';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
+import { Address } from '@ecore/core/common/value-objects/address';
+import { EmailAddress } from '@ecore/core/common/value-objects/email-address';
+import { Money } from '@ecore/core/common/value-objects/money';
 import { User } from './user';
-import { AggregateRoot } from '@ecore/domain/core/aggregate-root';
+import { AggregateRoot } from '@ecore/core/aggregate-root';
 import { CustomerCreatedEvent } from '../events/customer-created.event';
 import {
   BadRequestException,
   UnprocessableException,
-} from '@ecore/domain/common/exceptions';
+} from '@ecore/core/common/exceptions';
 import { CreditPurchaseApprovedEvent } from '../events/credit-purchase-approved.event';
 import { CreditPurchaseRejectedEvent } from '../events/credit-purchase-rejected.event';
 export type CustomerEvents =
@@ -20,6 +20,8 @@ export const CUSTOMER_EVENTS = [
   CreditPurchaseApprovedEvent.name,
   CreditPurchaseRejectedEvent.name,
 ];
+
+export const CUSTOMER_PRESENTER = Symbol('CUSTOMER_PRESENTER');
 
 export interface CustomerProps {
   user: User;

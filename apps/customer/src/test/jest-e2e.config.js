@@ -24,6 +24,7 @@ module.exports = {
       '<rootDir>/../../../../packages/event-publisher/src/$1',
     '^@ecore/exception-filters/(.*)$':
       '<rootDir>/../../../../packages/exception-filters/src/$1',
+    '^@ecore/([^/]+)/(.*)$': '<rootDir>/../../../../packages/$1/src/$2',
     '^@ecore/(.*)$': '<rootDir>/../../../../packages/$1/src',
   },
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],

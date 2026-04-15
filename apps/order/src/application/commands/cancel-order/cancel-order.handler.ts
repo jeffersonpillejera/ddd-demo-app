@@ -1,12 +1,20 @@
-import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
-import { OrderRepository } from '../../../domain/repositories/order.repository';
-import { ILogger } from '@ecore/domain/core/logger';
-import { NotFoundException } from '@ecore/domain/common/exceptions';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import {
+  ORDER_REPOSITORY,
+  type IOrderRepository,
+} from '../../../domain/repositories/order.repository';
+import { type ILogger } from '@ecore/core/logger';
+import { NotFoundException } from '@ecore/core/common/exceptions';
 import { CancelOrderCommand } from './cancel-order.command';
+import { Inject } from '@nestjs/common/decorators/core/inject.decorator';
+import { LOGGER_TOKEN } from '@ecore/logger/constants';
 
-export class CancelOrderHandler implements CommandHandler<CancelOrderCommand> {
+@CommandHandler(CancelOrderCommand)
+export class CancelOrderHandler implements ICommandHandler<CancelOrderCommand> {
   constructor(
-    private readonly orderRepository: OrderRepository,
+    @Inject(ORDER_REPOSITORY)
+    private readonly orderRepository: IOrderRepository,
+    @Inject(LOGGER_TOKEN)
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);

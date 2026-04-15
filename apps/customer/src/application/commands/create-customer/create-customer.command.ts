@@ -1,8 +1,8 @@
-import { Command } from '@ecore/domain/core/cqrs/command';
-import { CreateCustomerDTO } from '../../dtos/customer.dto';
+import { Command } from '@nestjs/cqrs';
+import { ICreateCustomerDTO } from '../../dto.interface';
 
-export class CreateCustomerCommand extends Command {
-  constructor(public readonly createCustomerDTO: CreateCustomerDTO) {
+export class CreateCustomerCommand extends Command<void> {
+  constructor(public readonly createCustomerDTO: ICreateCustomerDTO) {
     super();
   }
 }

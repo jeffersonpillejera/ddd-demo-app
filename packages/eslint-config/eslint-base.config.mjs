@@ -1,11 +1,12 @@
 // @ts-check
+import { defineConfig } from 'eslint/config';
 import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import eslintConfigTurbo from 'eslint-config-turbo/flat';
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: [
       ".*.mjs",

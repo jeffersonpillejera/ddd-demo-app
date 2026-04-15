@@ -6,15 +6,15 @@ import {
   ORDER_ID_LENGTH,
 } from './order';
 import { OrderItem } from './order-item';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 import {
   Money,
   CurrencyCodeEnum,
-} from '@ecore/domain/common/value-objects/money';
+} from '@ecore/core/common/value-objects/money';
 import {
   BadRequestException,
   UnprocessableException,
-} from '@ecore/domain/common/exceptions';
+} from '@ecore/core/common/exceptions';
 import { OrderPlacedEvent } from '../events/order-placed.event';
 import { OrderConfirmedEvent } from '../events/order-confirmed.event';
 import { OrderCancelledEvent } from '../events/order-cancelled.event';
@@ -52,11 +52,14 @@ describe('Order', () => {
       amount: 250,
       currency: CurrencyCodeEnum.USD,
     });
-    mockDiscount = Money.create({ amount: 10, currency: CurrencyCodeEnum.USD });
+    mockDiscount = Money.create({
+      amount: -10,
+      currency: CurrencyCodeEnum.USD,
+    });
     mockTotalTax = Money.create({ amount: 20, currency: CurrencyCodeEnum.USD });
-    // grandTotal = subTotal + discount + totalTax = 250 + 10 + 20 = 280
+    // grandTotal = subTotal + discount + totalTax = 250 + (-10) + 20 = 260
     mockGrandTotal = Money.create({
-      amount: 280,
+      amount: 260,
       currency: CurrencyCodeEnum.USD,
     });
 

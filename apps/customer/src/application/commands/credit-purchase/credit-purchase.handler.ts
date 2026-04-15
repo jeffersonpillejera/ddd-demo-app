@@ -1,13 +1,21 @@
-import { ILogger } from '@ecore/domain/core/logger';
-import { CustomerRepository } from '../../../domain/repositories/customer.repository';
-import { NotFoundException } from '@ecore/domain/common/exceptions';
-import { Money } from '@ecore/domain/common/value-objects/money';
+import { type ILogger } from '@ecore/core/logger';
+import {
+  CUSTOMER_REPOSITORY,
+  type ICustomerRepository,
+} from '../../../domain/repositories/customer.repository';
+import { NotFoundException } from '@ecore/core/common/exceptions';
+import { Money } from '@ecore/core/common/value-objects/money';
 import { CreditPurchaseCommand } from './credit-purchase.command';
-import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common/decorators/core/inject.decorator';
+import { LOGGER_TOKEN } from '@ecore/logger/constants';
 
-export class CreditPurchaseHandler implements CommandHandler<CreditPurchaseCommand> {
+@CommandHandler(CreditPurchaseCommand)
+export class CreditPurchaseHandler implements ICommandHandler<CreditPurchaseCommand> {
   constructor(
-    private readonly customerRepository: CustomerRepository,
+    @Inject(CUSTOMER_REPOSITORY)
+    private readonly customerRepository: ICustomerRepository,
+    @Inject(LOGGER_TOKEN)
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);

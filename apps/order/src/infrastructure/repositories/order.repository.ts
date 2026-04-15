@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OrderRepository as DomainOrderRepository } from '../../domain/repositories/order.repository';
+import { IOrderRepository as DomainOrderRepository } from '../../domain/repositories/order.repository';
 import { EventStore } from '../event-store/event-store';
 import { Order, OrderEvents } from '../../domain/models/order';
 import { OrderEventsDataMapper } from '../data-mappers/order-events.data-mapper';
@@ -74,5 +74,9 @@ export class OrderRepository implements DomainOrderRepository {
       events.map((event) => this.orderEventsDataMapper.toDomain(event)),
     );
     return order;
+  }
+
+  findMany(): Promise<Order[]> {
+    throw new Error('Method not implemented.');
   }
 }

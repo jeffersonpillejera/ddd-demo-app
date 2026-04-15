@@ -1,11 +1,11 @@
 import { User, UserProps } from './user';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
-import { Password } from '@ecore/domain/common/value-objects/password';
-import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
+import { Password } from '@ecore/core/common/value-objects/password';
+import { IpAddress } from '@ecore/core/common/value-objects/ip-address';
 import {
   BadRequestException,
   UnprocessableException,
-} from '@ecore/domain/common/exceptions';
+} from '@ecore/core/common/exceptions';
 
 describe('User', () => {
   let mockPassword: Password;

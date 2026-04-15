@@ -1,0 +1,2 @@
+export const MESSAGE_BROKER_TOKEN = Symbol('MESSAGE_BROKER');
+export const EVENT_PRESENTER_TOKEN = Symbol('EVENT_PRESENTER');

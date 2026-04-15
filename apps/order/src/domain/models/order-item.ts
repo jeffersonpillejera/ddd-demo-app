@@ -1,7 +1,7 @@
-import { Money } from '@ecore/domain/common/value-objects/money';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
-import { BadRequestException } from '@ecore/domain/common/exceptions';
-import { Entity } from '@ecore/domain/core/entity';
+import { Money } from '@ecore/core/common/value-objects/money';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
+import { BadRequestException } from '@ecore/core/common/exceptions';
+import { Entity } from '@ecore/core/entity';
 
 export interface OrderItemProps {
   productId: string;

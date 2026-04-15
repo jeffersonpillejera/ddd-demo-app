@@ -1,6 +1,6 @@
-import { Command } from '@ecore/domain/core/cqrs/command';
+import { Command } from '@nestjs/cqrs';
 
-export class CancelOrderCommand extends Command {
+export class CancelOrderCommand extends Command<void> {
   constructor(public readonly orderId: string) {
     super();
   }

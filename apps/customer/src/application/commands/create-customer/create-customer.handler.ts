@@ -1,25 +1,30 @@
 import { Customer } from '../../../domain/models/customer';
-import { CustomerRepository } from '../../../domain/repositories/customer.repository';
-import { User } from '../../../domain/models/user';
 import {
-  Address,
-  CountryCodeEnum,
-} from '@ecore/domain/common/value-objects/address';
-import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
+  type ICustomerRepository,
+  CUSTOMER_REPOSITORY,
+} from '../../../domain/repositories/customer.repository';
+import { User } from '../../../domain/models/user';
+import { Address } from '@ecore/core/common/value-objects/address';
+import { EmailAddress } from '@ecore/core/common/value-objects/email-address';
 import {
   CurrencyCodeEnum,
   Money,
-} from '@ecore/domain/common/value-objects/money';
-import { Password } from '@ecore/domain/common/value-objects/password';
-import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
-import { BadRequestException } from '@ecore/domain/common/exceptions';
-import { ILogger } from '@ecore/domain/core/logger';
-import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
+} from '@ecore/core/common/value-objects/money';
+import { Password } from '@ecore/core/common/value-objects/password';
+import { IpAddress } from '@ecore/core/common/value-objects/ip-address';
+import { BadRequestException } from '@ecore/core/common/exceptions';
+import { LOGGER_TOKEN } from '@ecore/logger/constants';
+import { type ILogger } from '@ecore/core/logger';
 import { CreateCustomerCommand } from './create-customer.command';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
-export class CreateCustomerHandler implements CommandHandler<CreateCustomerCommand> {
+@CommandHandler(CreateCustomerCommand)
+export class CreateCustomerHandler implements ICommandHandler<CreateCustomerCommand> {
   constructor(
-    private readonly customerRepository: CustomerRepository,
+    @Inject(CUSTOMER_REPOSITORY)
+    private readonly customerRepository: ICustomerRepository,
+    @Inject(LOGGER_TOKEN)
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);
@@ -59,7 +64,7 @@ export class CreateCustomerHandler implements CommandHandler<CreateCustomerComma
       addresses:
         addresses?.map((address) =>
           Address.create({
-            country: address.country as CountryCodeEnum,
+            country: address.country,
             type: address.type,
             label: address.label,
             street1: address.street1,

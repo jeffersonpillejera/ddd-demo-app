@@ -1,10 +1,10 @@
-import { DataMapper } from '@ecore/domain/core/data-mapper';
+import { DataMapper } from '@ecore/core/data-mapper';
 import { Order, ORDER_STATUS } from '../../domain/models/order';
 import { Injectable } from '@nestjs/common';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 import { OrderItem } from '../../domain/models/order-item';
 import { Prisma } from '../projection-store/prisma/generated/client';
-import { CurrencyCodeEnum } from '@ecore/domain/common/value-objects/money';
+import { CurrencyCodeEnum } from '@ecore/core/common/value-objects/money';
 import { Decimal } from '@prisma/client/runtime/client';
 
 type PesistedOrderEntity = Prisma.OrderGetPayload<{ include: { items: true } }>;

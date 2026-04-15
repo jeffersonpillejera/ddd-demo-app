@@ -1,9 +1,9 @@
-import { SnapshotStore as DomainSnapshotStore } from '@ecore/domain/core/event-sourcing/snapshot-store';
+import { SnapshotStore as DomainSnapshotStore } from '@ecore/core/event-sourcing/snapshot-store';
 import { Model } from 'mongoose';
 import { SnapshotEntity } from './snapshot.schema';
-import { AggregateRoot } from '@ecore/domain/core/event-sourcing/aggregate-root';
-import { Snapshot } from '@ecore/domain/core/event-sourcing/snapshot';
-import { DataMapper } from '@ecore/domain/core/data-mapper';
+import { AggregateRoot } from '@ecore/core/event-sourcing/aggregate-root';
+import { Snapshot } from '@ecore/core/event-sourcing/snapshot';
+import { DataMapper } from '@ecore/core/data-mapper';
 
 export class SnapshotStore<
   T extends AggregateRoot<any>,

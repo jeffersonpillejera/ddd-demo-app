@@ -1,4 +1,4 @@
-import { ProjectionRebuilder } from '@ecore/domain/core/event-sourcing/projection-rebuilder';
+import { ProjectionRebuilder } from '@ecore/core/event-sourcing/projection-rebuilder';
 import { ProjectionStoreService } from './projection-store.service';
 import { Injectable } from '@nestjs/common';
 import { OrderDataMapper } from '../data-mappers/order.data-mapper';

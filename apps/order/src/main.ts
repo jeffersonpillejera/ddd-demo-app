@@ -1,5 +1,5 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { AppModule } from './infrastructure/module';
+import { OrderModule } from './module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from '@nestjs/swagger';
@@ -12,7 +12,7 @@ import { LoggerService } from '@ecore/logger/logger.service';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create(OrderModule, {
     forceCloseConnections: true,
     bufferLogs: true,
   });

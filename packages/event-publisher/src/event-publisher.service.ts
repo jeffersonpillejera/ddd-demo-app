@@ -1,9 +1,10 @@
-import { DomainEvent } from '@ecore/domain/core/domain-event';
-import type { Presenter } from '@ecore/domain/core/presenter';
+import { DomainEvent } from '@ecore/core/domain-event';
+import type { Presenter } from '@ecore/core/presenter';
 import { Inject, Injectable } from '@nestjs/common';
 import { IEventPublisher, IMessageSource } from '@nestjs/cqrs';
 import { ClientProxy } from '@nestjs/microservices';
 import { Subject } from 'rxjs';
+import { EVENT_PRESENTER_TOKEN, MESSAGE_BROKER_TOKEN } from './constants';
 
 @Injectable()
 export class EventPublisherService
@@ -12,9 +13,9 @@ export class EventPublisherService
   private subject$: Subject<DomainEvent> = new Subject<DomainEvent>();
 
   constructor(
-    @Inject('MESSAGE_BROKER')
+    @Inject(MESSAGE_BROKER_TOKEN)
     private readonly messageBroker: ClientProxy,
-    @Inject('EVENT_PRESENTER')
+    @Inject(EVENT_PRESENTER_TOKEN)
     private readonly eventPresenter: Presenter<DomainEvent, unknown>,
   ) {}
 
@@ -26,7 +27,7 @@ export class EventPublisherService
     this.messageBroker.emit(event.type, this.eventPresenter.toDTO(event));
   }
 
-  bridgeEventsTo(subject: Subject<DomainEvent>): void {
-    this.subject$ = subject;
+  bridgeEventsTo<T extends DomainEvent>(subject: Subject<T>): void {
+    this.subject$ = subject as unknown as Subject<DomainEvent>;
   }
 }

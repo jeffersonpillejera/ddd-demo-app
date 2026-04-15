@@ -1,12 +1,12 @@
-import { DataMapper } from '@ecore/domain/core/data-mapper';
+import { DataMapper } from '@ecore/core/data-mapper';
 import { OrderEvents } from '../../domain/models/order';
 import { Injectable } from '@nestjs/common';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 import {
-  OrderCanceledEventDTO,
-  OrderConfirmedEventDTO,
-  OrderPlacedEventDTO,
-} from '../../application/dtos/order.dto';
+  IOrderCanceledEventDTO,
+  IOrderConfirmedEventDTO,
+  IOrderPlacedEventDTO,
+} from '../../application/dto.interface';
 import { OrderPlacedEvent } from '../../domain/events/order-placed.event';
 import { OrderConfirmedEvent } from '../../domain/events/order-confirmed.event';
 import { OrderCancelledEvent } from '../../domain/events/order-cancelled.event';
@@ -22,7 +22,7 @@ export class OrderEventsDataMapper extends DataMapper<
     const { type, data } = event;
     switch (type) {
       case OrderConfirmedEvent.name: {
-        const confirmedEvent = data as unknown as OrderConfirmedEventDTO;
+        const confirmedEvent = data as unknown as IOrderConfirmedEventDTO;
         return new OrderConfirmedEvent(
           new UniqueIdentifier(confirmedEvent.orderId.toString()),
           confirmedEvent.status,
@@ -31,7 +31,7 @@ export class OrderEventsDataMapper extends DataMapper<
         );
       }
       case OrderCancelledEvent.name: {
-        const canceledEvent = data as unknown as OrderCanceledEventDTO;
+        const canceledEvent = data as unknown as IOrderCanceledEventDTO;
         return new OrderCancelledEvent(
           new UniqueIdentifier(canceledEvent.orderId.toString()),
           canceledEvent.status,
@@ -40,7 +40,7 @@ export class OrderEventsDataMapper extends DataMapper<
         );
       }
       case OrderPlacedEvent.name: {
-        const placedEvent = data as unknown as OrderPlacedEventDTO;
+        const placedEvent = data as unknown as IOrderPlacedEventDTO;
         return new OrderPlacedEvent(
           new UniqueIdentifier(placedEvent.orderId.toString()),
           placedEvent.status,
@@ -109,7 +109,6 @@ export class OrderEventsDataMapper extends DataMapper<
             createdAt: event.createdAt,
           },
         };
-        break;
       }
       case OrderConfirmedEvent.name: {
         const event = domain as OrderConfirmedEvent;

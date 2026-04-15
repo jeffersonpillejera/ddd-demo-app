@@ -1,20 +1,30 @@
-import { OrderRepository } from '../../../domain/repositories/order.repository';
-import { ILogger } from '@ecore/domain/core/logger';
-import { SequenceGenerator } from '@ecore/domain/core/sequence-generator';
+import {
+  ORDER_REPOSITORY,
+  type IOrderRepository,
+} from '../../../domain/repositories/order.repository';
+import { type ILogger } from '@ecore/core/logger';
+import { type SequenceGenerator } from '@ecore/core/sequence-generator';
 import {
   Order,
   ORDER_ID_PREFIX,
   ORDER_STATUS,
 } from '../../../domain/models/order';
 import { OrderItem } from '../../../domain/models/order-item';
-import { Money } from '@ecore/domain/common/value-objects/money';
-import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
+import { Money } from '@ecore/core/common/value-objects/money';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PlaceOrderCommand } from './place-order.command';
+import { Inject } from '@nestjs/common';
+import { LOGGER_TOKEN } from '@ecore/logger/constants';
+import { SEQUENCE_GENERATOR_TOKEN } from '@ecore/core/sequence-generator';
 
-export class PlaceOrderHandler implements CommandHandler<PlaceOrderCommand> {
+@CommandHandler(PlaceOrderCommand)
+export class PlaceOrderHandler implements ICommandHandler<PlaceOrderCommand> {
   constructor(
-    private readonly orderRepository: OrderRepository,
+    @Inject(ORDER_REPOSITORY)
+    private readonly orderRepository: IOrderRepository,
+    @Inject(SEQUENCE_GENERATOR_TOKEN)
     private readonly sequenceGenerator: SequenceGenerator,
+    @Inject(LOGGER_TOKEN)
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);

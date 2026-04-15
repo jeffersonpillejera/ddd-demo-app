@@ -1,12 +1,20 @@
-import { OrderRepository } from '../../../domain/repositories/order.repository';
-import { ILogger } from '@ecore/domain/core/logger';
-import { NotFoundException } from '@ecore/domain/common/exceptions';
-import { CommandHandler } from '@ecore/domain/core/cqrs/command.handler';
+import {
+  ORDER_REPOSITORY,
+  type IOrderRepository,
+} from '../../../domain/repositories/order.repository';
+import { type ILogger } from '@ecore/core/logger';
+import { NotFoundException } from '@ecore/core/common/exceptions';
 import { ConfirmOrderCommand } from './confirm-order.command';
+import { Inject } from '@nestjs/common/decorators/core/inject.decorator';
+import { LOGGER_TOKEN } from '@ecore/logger/constants';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-export class ConfirmOrderHandler implements CommandHandler<ConfirmOrderCommand> {
+@CommandHandler(ConfirmOrderCommand)
+export class ConfirmOrderHandler implements ICommandHandler<ConfirmOrderCommand> {
   constructor(
-    private readonly orderRepository: OrderRepository,
+    @Inject(ORDER_REPOSITORY)
+    private readonly orderRepository: IOrderRepository,
+    @Inject(LOGGER_TOKEN)
     private readonly logger: ILogger,
   ) {
     this.logger.setContext(this.constructor.name);

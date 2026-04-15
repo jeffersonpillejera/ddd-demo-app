@@ -7,14 +7,14 @@ import {
   Logger,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { DomainError } from '@ecore/domain/core/domain-error';
+import { DomainError } from '@ecore/core/domain-error';
 import {
   BadRequestException,
   ForbiddenException,
   NotFoundException,
   UnauthorizedException,
   UnprocessableException,
-} from '@ecore/domain/common/exceptions';
+} from '@ecore/core/common/exceptions';
 
 interface HttpExceptionResponse {
   message: string;
