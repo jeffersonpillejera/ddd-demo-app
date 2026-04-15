@@ -52,11 +52,14 @@ describe('Order', () => {
       amount: 250,
       currency: CurrencyCodeEnum.USD,
     });
-    mockDiscount = Money.create({ amount: 10, currency: CurrencyCodeEnum.USD });
+    mockDiscount = Money.create({
+      amount: -10,
+      currency: CurrencyCodeEnum.USD,
+    });
     mockTotalTax = Money.create({ amount: 20, currency: CurrencyCodeEnum.USD });
-    // grandTotal = subTotal + discount + totalTax = 250 + 10 + 20 = 280
+    // grandTotal = subTotal + discount + totalTax = 250 + (-10) + 20 = 260
     mockGrandTotal = Money.create({
-      amount: 280,
+      amount: 260,
       currency: CurrencyCodeEnum.USD,
     });
 
