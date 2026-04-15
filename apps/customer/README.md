@@ -2,116 +2,138 @@
 
 ## Description
 
-A service that exposes a REST API for managing user and customer accounts. The codebase follows **Clean Architecture** strictly: the Domain and Application layers have no dependency on frameworks or infrastructure. The **application proxy** is the bridge that connects the Application layer to the Infrastructure layer (NestJS, HTTP, persistence) without inverting the dependency rule.
+A NestJS service that exposes a REST API for managing user and customer accounts. The codebase follows **Clean Architecture** strictly: the Domain and Application layers have no dependency on frameworks or infrastructure. The **Application Layer** is the bridge that connects the Domain to the Infrastructure layer (NestJS, HTTP, Prisma) without violating the dependency rule.
 
 ---
 
 ## Clean Architecture in this service
 
-Dependencies point **inward**: Infrastructure → Application → Domain. The Domain has no dependencies on the outside; the Application layer depends only on domain abstractions (interfaces); the Infrastructure layer implements those abstractions and drives the application via the **application proxy**.
+Dependencies point **inward**: Infrastructure → Application → Domain. The Domain has no dependencies on the outside; the Application layer depends only on domain abstractions (interfaces); the Infrastructure layer implements those abstractions and drives the application.
 
 ### Layer overview
 
-| Layer              | Location              | Responsibility                                                                                                              | Dependencies                                                                          |
-| ------------------ | --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| **Domain**         | `src/domain/`         | Entities (Customer, User), value objects, domain events, **repository interfaces**                                          | None (only `@ecore/domain` core types)                                                |
-| **Application**    | `src/application/`    | Use cases: Commands, Queries, DTOs, **handlers** that orchestrate domain and repositories                                   | Domain interfaces only (Repository, Presenter, ILogger, CommandHandler, QueryHandler) |
-| **Infrastructure** | `src/infrastructure/` | Controllers (HTTP, event patterns), **application proxy**, repository implementations, presenters, persistence, subscribers | Application + Domain (and NestJS, Prisma, etc.)                                       |
+| Layer              | Location              | Responsibility                                                                                               | Dependencies                                                           |
+| ------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| **Domain**         | `src/domain/`         | Aggregates (`Customer`, `User`), value objects, domain events, **repository interfaces**                     | None (only `@ecore/core` primitives)                                   |
+| **Application**    | `src/application/`    | Commands (`CreateCustomer`, `CreditPurchase`), Queries (`GetCustomer`), **handlers** that orchestrate domain | Domain interfaces only (`ICustomerRepository`, `Presenter`, `ILogger`) |
+| **Infrastructure** | `src/infrastructure/` | Controllers, repositories (Prisma), data mappers, presenters, subscribers, event patterns, config            | Application + Domain (and NestJS, Prisma, Redis, etc.)                 |
 
-The Application layer does **not** import NestJS, Prisma, or any HTTP/transport. It only knows about commands, queries, domain models, and interfaces such as `CustomerRepository`, `Presenter<Customer, CustomerDTO>`, and `ILogger`. All framework and I/O concerns live in Infrastructure.
+The Application layer does **not** import Prisma or any HTTP/transport. It only knows about commands, queries, domain models, and interfaces such as `ICustomerRepository`, `Presenter<Customer, ICustomerDTO>`, and `ILogger`. All framework and I/O concerns live in Infrastructure.
 
 ---
 
-## Application proxy: connecting Application and Infrastructure
+## CQRS wiring
 
-The **application proxy** is the adapter that allows the **Infrastructure** layer to run **Application** use cases without the Application layer depending on the framework. It sits in `src/infrastructure/application-proxy/`.
-
-### Why a proxy?
-
-- The **Application** layer defines **handlers** that implement **domain** CQRS contracts (`CommandHandler<T>`, `QueryHandler<T, R>` from `@ecore/domain`). These handlers depend on **abstractions** (e.g. `CustomerRepository`, `Presenter<Customer, CustomerDTO>`, `ILogger`). They are plain TypeScript classes with no NestJS decorators.
-- The **Infrastructure** layer uses **NestJS CQRS**: controllers call `CommandBus.execute(command)` and `QueryBus.execute(query)`. The bus needs **NestJS-registered** handlers (classes decorated with `@CommandHandler(Command)` / `@QueryHandler(Query)` that implement `ICommandHandler` / `IQueryHandler`).
-- So we need a component that:
-  1. Is part of **Infrastructure** (knows NestJS).
-  2. Registers with the CQRS bus so it receives commands/queries.
-  3. Delegates to the **Application** handler and **injects** concrete implementations of the abstractions the handler expects.
-
-That component is the **application proxy**.
-
-### How it is implemented
-
-For each use case there is a **proxy class** in Infrastructure that:
-
-1. **Extends** the corresponding Application handler (e.g. `CreateCustomerHandler`, `CreditPurchaseHandler`, `GetCustomerHandler`).
-2. **Implements** NestJS’s handler interface (`ICommandHandler<CreateCustomerCommand>` or `IQueryHandler<GetCustomerQuery, CustomerDTO>`) so the CQRS bus can route to it.
-3. Is **decorated** with `@CommandHandler(CreateCustomerCommand)` or `@QueryHandler(GetCustomerQuery)` so Nest discovers it.
-4. In the **constructor**, receives **concrete** Infrastructure dependencies (e.g. `CustomerRepository` from `infrastructure/repositories`, `LoggerService`, `CustomerPresenter`) and passes them to `super(...)`, satisfying the Application handler’s dependencies.
-5. In **`execute(command)` or `execute(query)`**, delegates to `super.execute(command)` or `super.execute(query)` so the real logic runs in the Application layer.
-
-Example (conceptually):
+Application handlers are registered directly as NestJS providers and implement NestJS CQRS interfaces (`ICommandHandler`, `IQueryHandler`) in the application layer. Infrastructure dependencies (repository implementations, presenters, logger) are injected into handlers via NestJS's `@Inject(TOKEN)` using domain-defined injection tokens.
 
 ```text
 Controller (Infrastructure)
   → commandBus.execute(new CreateCustomerCommand(...))
-  → Nest routes to CreateCustomerProxy (registered @CommandHandler)
-  → CreateCustomerProxy.execute(command) → super.execute(command)
-  → CreateCustomerHandler (Application) runs with CustomerRepository, ILogger
-      → repository and logger are the concrete implementations injected by the proxy
+  → Nest routes to CreateCustomerHandler (@CommandHandler)
+  → CreateCustomerHandler runs with ICustomerRepository, ILogger
+      → concrete implementations are injected by NestJS DI
 ```
 
-So:
+All handlers are declared as providers in `CustomerModule` alongside their infrastructure dependencies:
 
-- **Controllers** only use `CommandBus` / `QueryBus` and application DTOs/commands/queries. They never depend on handler or repository classes directly.
-- **Application handlers** never import NestJS or Infrastructure; they only depend on domain interfaces.
-- **Proxies** are the only place that “wires” framework (Nest CQRS) to application use cases and injects infrastructure implementations into the application layer at runtime.
+```text
+CustomerModule
+  providers: [
+    CustomerDataMapper,
+    CustomerRepository,
+    { provide: CUSTOMER_REPOSITORY, useExisting: CustomerRepository },
+    CreateCustomerHandler,   ← @CommandHandler(CreateCustomerCommand)
+    CreditPurchaseHandler,   ← @CommandHandler(CreditPurchaseCommand)
+    GetCustomerHandler,      ← @QueryHandler(GetCustomerQuery)
+    AllCustomerEventsHandler,
+  ]
+```
 
-### Proxy modules and registration
-
-- **ApplicationProxyModule** (in `infrastructure/application-proxy/`) imports RepositoriesModule, PresentersModule, and LoggerModule, and declares the proxy providers: `CreateCustomerProxy`, `CreditPurchaseProxy`, `GetCustomerProxy`. These are the classes that Nest’s `CqrsModule` discovers as command/query handlers.
-- **ControllersModule** imports **ApplicationProxyModule** (so the proxies are registered in the same app) and declares the controllers. Controllers use the buses; the buses dispatch to the proxies; the proxies delegate to the application handlers.
-
-So the flow is strictly: **Controller → Bus → Proxy (Infrastructure) → Application Handler → Domain**. The Application layer is never coupled to HTTP, Nest, or the database; the proxy is the single connection point between the framework and the use cases.
+- **Controllers** only use `CommandBus` / `QueryBus`. They never depend on handler or repository classes directly.
+- **Application handlers** use NestJS CQRS decorators but do not import Prisma, HTTP, or any infrastructure detail.
+- **Dependency injection** wires concrete infrastructure implementations (e.g. `CustomerRepository`, `CustomerPresenter`) to the abstract tokens (`CUSTOMER_REPOSITORY`, `CUSTOMER_PRESENTER`) that handlers depend on.
 
 ---
 
-## Dependency rule in practice
+## Infrastructure structure
 
-- **Domain** defines `CustomerRepository` (interface), `Presenter`, and CQRS handler interfaces. It does not know who implements them.
-- **Application** implements use cases by depending on `CustomerRepository`, `Presenter<Customer, CustomerDTO>`, and `ILogger` (all interfaces/abstractions). It does not import anything from `infrastructure/`.
-- **Infrastructure** implements `CustomerRepository` (e.g. Prisma-backed), `CustomerPresenter` (domain → API DTO), and provides the **application proxy** that extends the application handlers and injects these implementations. Controllers and event handlers live here and use the buses only.
+```
+src/infrastructure/
+├── config/                   # Env validation, module, service
+├── controllers/              # HTTP + event-pattern handlers
+├── data-mappers/             # Persistence ↔ domain model mapping
+├── persistence/              # Database (Prisma)
+├── presenters/               # Domain → API DTO (CustomerPresenter, CustomerEventsPresenter)
+├── repositories/             # Prisma-backed CustomerRepository implementation
+└── subscribers/              # Domain event subscribers (e.g. outgoing event publishing)
+```
 
-Thus: **Infrastructure → Application → Domain**; Application and Domain remain framework-agnostic and testable in isolation. The application proxy is what makes this possible while still using NestJS CQRS and the rest of the infrastructure stack.
+---
+
+## HTTP API
+
+| Method | Path            | Description               |
+| ------ | --------------- | ------------------------- |
+| `POST` | `/customer`     | Create a new customer     |
+| `GET`  | `/customer/:id` | Retrieve a customer by ID |
+
+### Event patterns (via Redis)
+
+| Pattern            | Action                                                                    |
+| ------------------ | ------------------------------------------------------------------------- |
+| `OrderPlacedEvent` | Triggers the `CreditPurchase` use case; emits approved or rejected events |
+
+---
+
+## Environment variables
+
+| Variable          | Required | Description                           |
+| ----------------- | -------- | ------------------------------------- |
+| `DATABASE_URL`    | Yes      | PostgreSQL connection string (Prisma) |
+| `REDIS_HOST`      | Yes      | Redis hostname                        |
+| `REDIS_PORT`      | Yes      | Redis port                            |
+| `PORT`            | No       | HTTP port (default: 3008)             |
+| `ALLOWED_ORIGINS` | No       | CORS allowed origins                  |
+| `NODE_ENV`        | No       | `development` \| `production`         |
 
 ---
 
 ## Project setup
 
 ```bash
-# install all dependencies
-$ pnpm install
+# Install all dependencies from the monorepo root
+pnpm install
 ```
 
-## Compile and run the project
+## Compile and run
 
 ```bash
-# development watch mode
-$ pnpm run dev
+# Development (watch mode)
+pnpm run dev
 
-# debug mode
-$ pnpm run start:debug
+# Debug mode
+pnpm run start:debug
 
-# production mode
-$ pnpm run start:prod
+# Production
+pnpm run start:prod
+```
+
+## Docker
+
+```bash
+# From the apps/customer directory
+docker compose up
 ```
 
 ## Run tests
 
 ```bash
-# unit tests
-$ pnpm run test
+# Unit tests
+pnpm run test
 
-# e2e tests
-$ pnpm run test:e2e
+# E2E tests
+pnpm run test:e2e
 
-# test coverage
-$ pnpm run test:cov
+# Test coverage
+pnpm run test:cov
 ```
