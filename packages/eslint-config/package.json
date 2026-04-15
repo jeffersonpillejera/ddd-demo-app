@@ -1,13 +1,13 @@
 {
   "name": "@ecore/eslint-config",
   "version": "0.0.1",
-  "description": "A collection of ESLint configurations for the Customer E-commerce Portal Application",
+  "description": "A collection of ESLint configurations",
   "author": "Jefferson Pillejera <jefferson.pillejera@gmail.com>",
   "license": "MIT",
   "files": [
     "eslint-base.config.mjs",
-    "prettier-base.js",
-    "base-lint-staged.config.js"
+    "prettier-base.mjs",
+    "base-lint-staged.config.mjs"
   ],
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",

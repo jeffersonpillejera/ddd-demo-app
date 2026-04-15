@@ -1,22 +1,22 @@
 import { Customer, CustomerProps } from './customer';
 import { User } from './user';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
-import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
+import { EmailAddress } from '@ecore/core/common/value-objects/email-address';
 import {
   Money,
   CurrencyCodeEnum,
-} from '@ecore/domain/common/value-objects/money';
+} from '@ecore/core/common/value-objects/money';
 import {
   Address,
   AddressTypeEnum,
   CountryCodeEnum,
-} from '@ecore/domain/common/value-objects/address';
-import { Password } from '@ecore/domain/common/value-objects/password';
-import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
+} from '@ecore/core/common/value-objects/address';
+import { Password } from '@ecore/core/common/value-objects/password';
+import { IpAddress } from '@ecore/core/common/value-objects/ip-address';
 import {
   BadRequestException,
   UnprocessableException,
-} from '@ecore/domain/common/exceptions';
+} from '@ecore/core/common/exceptions';
 import { CustomerCreatedEvent } from '../events/customer-created.event';
 import { CreditPurchaseApprovedEvent } from '../events/credit-purchase-approved.event';
 import { CreditPurchaseRejectedEvent } from '../events/credit-purchase-rejected.event';

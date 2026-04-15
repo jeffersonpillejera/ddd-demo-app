@@ -1,20 +1,20 @@
 import {
   CurrencyCodeEnum,
   Money,
-} from '@ecore/domain/common/value-objects/money';
+} from '@ecore/core/common/value-objects/money';
 import { Customer } from '../../domain/models/customer';
-import { DataMapper } from '@ecore/domain/core/data-mapper';
-import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
+import { DataMapper } from '@ecore/core/data-mapper';
+import { EmailAddress } from '@ecore/core/common/value-objects/email-address';
 import {
   Address,
   AddressTypeEnum,
   CountryCodeEnum,
-} from '@ecore/domain/common/value-objects/address';
+} from '@ecore/core/common/value-objects/address';
 import { Prisma } from '../persistence/prisma/generated/client';
-import { Password } from '@ecore/domain/common/value-objects/password';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { Password } from '@ecore/core/common/value-objects/password';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 import { User } from '../../domain/models/user';
-import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
+import { IpAddress } from '@ecore/core/common/value-objects/ip-address';
 import { Injectable } from '@nestjs/common';
 import { Decimal } from '@prisma/client/runtime/client';
 

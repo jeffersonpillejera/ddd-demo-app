@@ -1,33 +1,36 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { DomainEvent } from '@ecore/domain/core/domain-event';
+import { DomainEvent } from '@ecore/core/domain-event';
 import type {
-  OrderConfirmedEventDTO,
-  OrderCanceledEventDTO,
-  OrderPlacedEventDTO,
-} from '../../application/dtos/order.dto';
+  IOrderConfirmedEventDTO,
+  IOrderCanceledEventDTO,
+  IOrderPlacedEventDTO,
+} from '../../application/dto.interface';
 
 export type EventDocument = HydratedDocument<EventEntity>;
 
 @Schema({ collection: 'events' })
 export class EventEntity implements DomainEvent {
   @Prop({ required: true })
-  id: string;
+  id!: string;
 
   @Prop({ required: true })
-  streamName: string;
+  streamName!: string;
 
   @Prop({ required: true })
-  type: string;
+  type!: string;
 
   @Prop({ required: true, type: Object })
-  data: OrderPlacedEventDTO | OrderConfirmedEventDTO | OrderCanceledEventDTO;
+  data!:
+    | IOrderPlacedEventDTO
+    | IOrderConfirmedEventDTO
+    | IOrderCanceledEventDTO;
 
   @Prop({ required: true })
-  occurredAt: Date;
+  occurredAt!: Date;
 
   @Prop({ required: true })
-  version: number;
+  version!: number;
 
   @Prop()
   correlationId?: string;

@@ -10,27 +10,27 @@ import {
 class EnvVariables {
   @IsString()
   @IsOptional()
-  NODE_ENV: string;
+  NODE_ENV?: string;
 
   @IsString()
   @IsNotEmpty()
-  DATABASE_URL: string;
+  DATABASE_URL!: string;
 
   @IsNumber()
   @IsOptional()
-  PORT: number;
+  PORT?: number;
 
   @IsString()
   @IsOptional()
-  ALLOWED_ORIGINS: string;
+  ALLOWED_ORIGINS?: string;
 
   @IsString()
   @IsNotEmpty()
-  REDIS_HOST: string;
+  REDIS_HOST!: string;
 
   @IsNumber()
   @IsNotEmpty()
-  REDIS_PORT: number;
+  REDIS_PORT!: number;
 }
 
 export function validate(config: Record<string, unknown>) {

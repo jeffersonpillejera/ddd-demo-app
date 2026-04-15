@@ -6,15 +6,15 @@ import {
   ORDER_ID_LENGTH,
 } from './order';
 import { OrderItem } from './order-item';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 import {
   Money,
   CurrencyCodeEnum,
-} from '@ecore/domain/common/value-objects/money';
+} from '@ecore/core/common/value-objects/money';
 import {
   BadRequestException,
   UnprocessableException,
-} from '@ecore/domain/common/exceptions';
+} from '@ecore/core/common/exceptions';
 import { OrderPlacedEvent } from '../events/order-placed.event';
 import { OrderConfirmedEvent } from '../events/order-confirmed.event';
 import { OrderCancelledEvent } from '../events/order-cancelled.event';

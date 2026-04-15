@@ -2,16 +2,17 @@ import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { PlaceOrderCommand } from '../../application/commands/place-order/place-order.command';
 import { CancelOrderCommand } from '../../application/commands/cancel-order/cancel-order.command';
 import { ConfirmOrderCommand } from '../../application/commands/confirm-order/confirm-order.command';
-import { ApiGetOrder, ApiPlaceOrder, PlaceOrderDTO } from './dtos/order.dto';
+import { ApiGetOrder, ApiPlaceOrder } from './order.swagger';
+import { PlaceOrderDTO } from '../presenters/order.dto';
 import {
-  ApiController,
   CreditPurchaseApprovedEventDTO,
   CreditPurchaseRejectedEventDTO,
-} from './dtos/common.dto';
+} from '@ecore/common/dto/customer.dto';
 import { GetOrderQuery } from '../../application/queries/get-order/get-order.query';
-import { OrderDTO } from '../../application/dtos/order.dto';
+import { OrderDTO } from '../presenters/order.dto';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { ApiController } from '@ecore/common/swagger/controller.swagger';
 
 @ApiController('order')
 @Controller('order')

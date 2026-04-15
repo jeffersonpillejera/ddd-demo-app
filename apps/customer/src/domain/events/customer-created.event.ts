@@ -1,8 +1,8 @@
-import { DomainEvent } from '@ecore/domain/core/domain-event';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
-import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
-import { Money } from '@ecore/domain/common/value-objects/money';
-import { Address } from '@ecore/domain/common/value-objects/address';
+import { DomainEvent } from '@ecore/core/domain-event';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
+import { EmailAddress } from '@ecore/core/common/value-objects/email-address';
+import { Money } from '@ecore/core/common/value-objects/money';
+import { Address } from '@ecore/core/common/value-objects/address';
 
 export class CustomerCreatedEvent extends DomainEvent {
   constructor(

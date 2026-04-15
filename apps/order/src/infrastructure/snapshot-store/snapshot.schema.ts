@@ -6,22 +6,22 @@ export type SnapshotDocument = HydratedDocument<SnapshotEntity>;
 @Schema({ collection: 'snapshots' })
 export class SnapshotEntity {
   @Prop({ required: true })
-  id: string;
+  id!: string;
 
   @Prop({ required: true })
-  aggregateId: string;
+  aggregateId!: string;
 
   @Prop({ required: true })
-  aggregateType: string;
+  aggregateType!: string;
 
   @Prop({ required: true })
-  version: number;
+  version!: number;
 
   @Prop({ required: true })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Prop({ required: true, type: Object })
-  data: Record<string, any>;
+  data!: Record<string, any>;
 }
 
 export const SnapshotEntitySchema =

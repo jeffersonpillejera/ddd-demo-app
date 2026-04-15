@@ -1,7 +1,7 @@
-import { Money } from '@ecore/domain/common/value-objects/money';
-import { DomainEvent } from '@ecore/domain/core/domain-event';
+import { Money } from '@ecore/core/common/value-objects/money';
+import { DomainEvent } from '@ecore/core/domain-event';
 import { OrderItem } from '../models/order-item';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 import { ORDER_STATUS } from '../models/order';
 
 export class OrderPlacedEvent extends DomainEvent {

@@ -1,0 +1,56 @@
+services:
+  customer:
+    build:
+      context: ../..
+      dockerfile: apps/customer/Dockerfile
+    ports:
+      - "${PORT:-3008}:3008"
+    environment:
+      NODE_ENV: production
+      PORT: 3008
+      DATABASE_URL: postgres://ecore_user:EC0ReUserPssw0rd@postgres:5432/ecore-customer-db?connection_limit=5
+      ALLOWED_ORIGINS: localhost:3008
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      EVENT_PUBLISHER_HOST: redis
+      EVENT_PUBLISHER_PORT: 6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ecore_user
+      POSTGRES_PASSWORD: EC0ReUserPssw0rd
+      POSTGRES_DB: ecore-customer-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/ecore-postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecore_user -d ecore-customer-db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/var/lib/ecore-redis/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:

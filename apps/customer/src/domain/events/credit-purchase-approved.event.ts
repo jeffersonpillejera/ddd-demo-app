@@ -1,5 +1,5 @@
-import { DomainEvent } from '@ecore/domain/core/domain-event';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { DomainEvent } from '@ecore/core/domain-event';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 
 export class CreditPurchaseApprovedEvent extends DomainEvent {
   constructor(

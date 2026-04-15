@@ -1,8 +1,8 @@
-import { Command } from '@ecore/domain/core/cqrs/command';
-import { CreditPurchaseDTO } from '../../dtos/customer.dto';
+import { Command } from '@nestjs/cqrs';
+import { ICreditPurchaseDTO } from '../../dto.interface';
 
-export class CreditPurchaseCommand extends Command {
-  constructor(public readonly creditPurchaseDTO: CreditPurchaseDTO) {
+export class CreditPurchaseCommand extends Command<void> {
+  constructor(public readonly creditPurchaseDTO: ICreditPurchaseDTO) {
     super();
   }
 }

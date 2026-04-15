@@ -12,8 +12,8 @@
   ],
   "scripts": {
     "dev": "pnpm build --watch",
-    "build": "tsc -b -v",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+    "build": "tsc -b --clean && tsc -b -v",
+    "lint": "eslint src --fix"
   },
   "typesVersions": {
     "*": {

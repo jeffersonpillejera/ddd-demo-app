@@ -3,15 +3,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from '../infrastructure/module';
-import { AddressTypeEnum } from '@ecore/domain/common/value-objects/address';
+import { CustomerModule } from '../module';
+import { AddressTypeEnum } from '@ecore/core/common/value-objects/address';
 
 describe('CustomerController (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [CustomerModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();

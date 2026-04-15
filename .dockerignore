@@ -1,0 +1,10 @@
+**/node_modules
+**/.turbo
+**/dist
+**/.next
+**/coverage
+**/.env*.local
+**/build
+**/*.log
+.git
+.gitignore

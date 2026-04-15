@@ -5,6 +5,7 @@ import {
   Scope,
 } from '@nestjs/common';
 import { LoggerService } from './logger.service';
+import { LOGGER_TOKEN } from './constants';
 
 @Module({})
 export class LoggerModule {
@@ -23,8 +24,20 @@ export class LoggerModule {
               },
             ),
         },
+        {
+          provide: LOGGER_TOKEN,
+          scope: Scope.TRANSIENT,
+          // useExisting: LoggerService, <-- TRANSIENT doesn't work with the useExisting
+          useFactory: () =>
+            new LoggerService(
+              options ?? {
+                logLevels: ['error', 'warn', 'log'],
+                prefix: 'Ecore',
+              },
+            ),
+        },
       ],
-      exports: [LoggerService],
+      exports: [LoggerService, LOGGER_TOKEN],
     };
   }
 }

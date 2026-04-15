@@ -1,29 +1,12 @@
-import { CustomerDTO } from '../../application/dtos/customer.dto';
+import { ICustomerDTO } from '../../application/dto.interface';
 import { Customer } from '../../domain/models/customer';
-import { Presenter } from '@ecore/domain/core/presenter';
+import { Presenter } from '@ecore/core/presenter';
 import { Injectable } from '@nestjs/common';
+import { CustomerDTO } from './customer.dto';
 
 @Injectable()
-export class CustomerPresenter implements Presenter<Customer, CustomerDTO> {
-  toDTO(domain: Customer): CustomerDTO {
-    return {
-      customerId: domain.id.toString(),
-      email: domain.email.value,
-      firstName: domain.firstName,
-      lastName: domain.lastName,
-      mobileNumber: domain.mobileNumber,
-      creditLimit: domain.creditLimit.props,
-      addresses:
-        domain.addresses?.map((address) => ({
-          label: address.props.label,
-          street1: address.props.street1,
-          street2: address.props.street2 ?? undefined,
-          city: address.props.city,
-          province: address.props.province,
-          zip: address.props.zip,
-          country: address.props.country,
-          type: address.props.type,
-        })) ?? [],
-    };
+export class CustomerPresenter implements Presenter<Customer, ICustomerDTO> {
+  toDTO(domain: Customer): ICustomerDTO {
+    return new CustomerDTO(domain);
   }
 }

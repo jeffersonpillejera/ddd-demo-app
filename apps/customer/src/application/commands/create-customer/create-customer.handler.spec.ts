@@ -1,18 +1,24 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { CreateCustomerHandler } from './create-customer.handler';
 import { CreateCustomerCommand } from './create-customer.command';
-import { CustomerRepository } from '../../../domain/repositories/customer.repository';
-import { ILogger } from '@ecore/domain/core/logger';
+import { type ICustomerRepository } from '../../../domain/repositories/customer.repository';
+import { type ILogger } from '@ecore/core/logger';
 import { Customer } from '../../../domain/models/customer';
-import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
-import { BadRequestException } from '@ecore/domain/common/exceptions';
-import { CreateCustomerDTO, CustomerAddressDTO } from '../../dtos/customer.dto';
-import { AddressTypeEnum } from '@ecore/domain/common/value-objects/address';
-import { CurrencyCodeEnum } from '@ecore/domain/common/value-objects/money';
+import { EmailAddress } from '@ecore/core/common/value-objects/email-address';
+import { BadRequestException } from '@ecore/core/common/exceptions';
+import {
+  type ICreateCustomerDTO,
+  type ICustomerAddressDTO,
+} from '../../dto.interface';
+import {
+  AddressTypeEnum,
+  CountryCodeEnum,
+} from '@ecore/core/common/value-objects/address';
+import { CurrencyCodeEnum } from '@ecore/core/common/value-objects/money';
 
 describe('CreateCustomerHandler', () => {
   let handler: CreateCustomerHandler;
-  let mockCustomerRepository: jest.Mocked<CustomerRepository>;
+  let mockCustomerRepository: jest.Mocked<ICustomerRepository>;
   let mockLogger: jest.Mocked<ILogger>;
 
   beforeEach(() => {
@@ -20,7 +26,7 @@ describe('CreateCustomerHandler', () => {
       findByEmail: jest.fn(),
       findById: jest.fn(),
       save: jest.fn(),
-    } as unknown as jest.Mocked<CustomerRepository>;
+    } as unknown as jest.Mocked<ICustomerRepository>;
 
     mockLogger = {
       setContext: jest.fn(),
@@ -43,7 +49,7 @@ describe('CreateCustomerHandler', () => {
   });
 
   describe('execute', () => {
-    const createCustomerDTO: CreateCustomerDTO = {
+    const createCustomerDTO: ICreateCustomerDTO = {
       email: 'test@example.com',
       firstName: 'John',
       lastName: 'Doe',
@@ -56,7 +62,7 @@ describe('CreateCustomerHandler', () => {
           city: 'Manila',
           province: 'Metro Manila',
           zip: '1000',
-          country: 'PH',
+          country: CountryCodeEnum.PH,
           type: AddressTypeEnum.BILLING,
         },
       ],
@@ -86,7 +92,7 @@ describe('CreateCustomerHandler', () => {
     });
 
     it('should create a customer without addresses when addresses is not provided', async () => {
-      const dtoWithoutAddresses: CreateCustomerDTO = {
+      const dtoWithoutAddresses: ICreateCustomerDTO = {
         ...createCustomerDTO,
         addresses: [],
       };
@@ -103,7 +109,7 @@ describe('CreateCustomerHandler', () => {
     });
 
     it('should create a customer without mobileNumber when mobileNumber is not provided', async () => {
-      const dtoWithoutMobile: CreateCustomerDTO = {
+      const dtoWithoutMobile: ICreateCustomerDTO = {
         ...createCustomerDTO,
         mobileNumber: null,
       };
@@ -120,7 +126,7 @@ describe('CreateCustomerHandler', () => {
     });
 
     it('should create a customer without mobileNumber when mobileNumber is undefined', async () => {
-      const dtoWithoutMobile: CreateCustomerDTO = {
+      const dtoWithoutMobile: ICreateCustomerDTO = {
         ...createCustomerDTO,
         mobileNumber: undefined,
       };
@@ -137,7 +143,7 @@ describe('CreateCustomerHandler', () => {
     });
 
     it('should create a customer with multiple addresses', async () => {
-      const dtoWithMultipleAddresses: CreateCustomerDTO = {
+      const dtoWithMultipleAddresses: ICreateCustomerDTO = {
         ...createCustomerDTO,
         addresses: [
           {
@@ -146,7 +152,7 @@ describe('CreateCustomerHandler', () => {
             city: 'Manila',
             province: 'Metro Manila',
             zip: '1000',
-            country: 'PH',
+            country: CountryCodeEnum.PH,
             type: AddressTypeEnum.BILLING,
           },
           {
@@ -155,7 +161,7 @@ describe('CreateCustomerHandler', () => {
             city: 'Makati',
             province: 'Metro Manila',
             zip: '1200',
-            country: 'PH',
+            country: CountryCodeEnum.PH,
             type: AddressTypeEnum.SHIPPING,
           },
         ],
@@ -173,7 +179,7 @@ describe('CreateCustomerHandler', () => {
     });
 
     it('should create a customer with address without street2', async () => {
-      const dtoWithoutStreet2: CreateCustomerDTO = {
+      const dtoWithoutStreet2: ICreateCustomerDTO = {
         ...createCustomerDTO,
         addresses: [
           {
@@ -182,7 +188,7 @@ describe('CreateCustomerHandler', () => {
             city: 'Manila',
             province: 'Metro Manila',
             zip: '1000',
-            country: 'PH',
+            country: CountryCodeEnum.PH,
             type: AddressTypeEnum.BILLING,
           },
         ],
@@ -272,7 +278,7 @@ describe('CreateCustomerHandler', () => {
     it('should handle null addresses array', async () => {
       const dtoWithNullAddresses = {
         ...createCustomerDTO,
-        addresses: null as unknown as CustomerAddressDTO[],
+        addresses: null as unknown as ICustomerAddressDTO[],
       };
       mockCustomerRepository.findByEmail.mockResolvedValue(null);
       mockCustomerRepository.save.mockResolvedValue({} as Customer);
@@ -290,7 +296,7 @@ describe('CreateCustomerHandler', () => {
     it('should handle undefined addresses', async () => {
       const dtoWithUndefinedAddresses = {
         ...createCustomerDTO,
-        addresses: undefined as unknown as CustomerAddressDTO[],
+        addresses: undefined as unknown as ICustomerAddressDTO[],
       };
       mockCustomerRepository.findByEmail.mockResolvedValue(null);
       mockCustomerRepository.save.mockResolvedValue({} as Customer);

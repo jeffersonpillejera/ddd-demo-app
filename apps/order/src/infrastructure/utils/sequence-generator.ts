@@ -1,5 +1,5 @@
-import { SequenceGenerator as ISequenceGenerator } from '@ecore/domain/core/sequence-generator';
-import { UniqueIdentifier } from '@ecore/domain/core/unique-identifier';
+import { SequenceGenerator as ISequenceGenerator } from '@ecore/core/sequence-generator';
+import { UniqueIdentifier } from '@ecore/core/unique-identifier';
 import { ORDER_ID_PREFIX } from '../../domain/models/order';
 import { Injectable } from '@nestjs/common';
 

@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { CreditPurchaseHandler } from './credit-purchase.handler';
 import { CreditPurchaseCommand } from './credit-purchase.command';
-import { CustomerRepository } from '../../../domain/repositories/customer.repository';
-import { ILogger } from '@ecore/domain/core/logger';
+import { type ICustomerRepository } from '../../../domain/repositories/customer.repository';
+import { type ILogger } from '@ecore/core/logger';
 import { Customer } from '../../../domain/models/customer';
-import { NotFoundException } from '@ecore/domain/common/exceptions';
-import { CreditPurchaseDTO } from '../../dtos/customer.dto';
+import { NotFoundException } from '@ecore/core/common/exceptions';
+import { type ICreditPurchaseDTO } from '../../dto.interface';
 import {
   Money,
   CurrencyCodeEnum,
-} from '@ecore/domain/common/value-objects/money';
-import { EmailAddress } from '@ecore/domain/common/value-objects/email-address';
+} from '@ecore/core/common/value-objects/money';
+import { EmailAddress } from '@ecore/core/common/value-objects/email-address';
 import { User } from '../../../domain/models/user';
-import { Password } from '@ecore/domain/common/value-objects/password';
-import { IpAddress } from '@ecore/domain/common/value-objects/ip-address';
+import { Password } from '@ecore/core/common/value-objects/password';
+import { IpAddress } from '@ecore/core/common/value-objects/ip-address';
 
 describe('CreditPurchaseHandler', () => {
   let handler: CreditPurchaseHandler;
-  let mockCustomerRepository: jest.Mocked<CustomerRepository>;
+  let mockCustomerRepository: jest.Mocked<ICustomerRepository>;
   let mockLogger: jest.Mocked<ILogger>;
   let mockCustomer: Customer;
 
@@ -26,7 +26,7 @@ describe('CreditPurchaseHandler', () => {
       findById: jest.fn(),
       findByEmail: jest.fn(),
       save: jest.fn(),
-    } as unknown as jest.Mocked<CustomerRepository>;
+    } as unknown as jest.Mocked<ICustomerRepository>;
 
     mockLogger = {
       setContext: jest.fn(),
@@ -73,7 +73,7 @@ describe('CreditPurchaseHandler', () => {
   });
 
   describe('execute', () => {
-    const creditPurchaseDTO: CreditPurchaseDTO = {
+    const creditPurchaseDTO: ICreditPurchaseDTO = {
       customerId: 'customer-123',
       orderId: 'order-456',
       grandTotal: { amount: 500, currency: CurrencyCodeEnum.USD },
@@ -152,7 +152,7 @@ describe('CreditPurchaseHandler', () => {
     });
 
     it('should handle different order IDs', async () => {
-      const dtoWithDifferentOrderId: CreditPurchaseDTO = {
+      const dtoWithDifferentOrderId: ICreditPurchaseDTO = {
         ...creditPurchaseDTO,
         orderId: 'order-789',
       };
@@ -171,7 +171,7 @@ describe('CreditPurchaseHandler', () => {
     });
 
     it('should handle different customer IDs', async () => {
-      const dtoWithDifferentCustomerId: CreditPurchaseDTO = {
+      const dtoWithDifferentCustomerId: ICreditPurchaseDTO = {
         ...creditPurchaseDTO,
         customerId: 'customer-999',
       };
@@ -190,7 +190,7 @@ describe('CreditPurchaseHandler', () => {
     });
 
     it('should handle zero amount purchase', async () => {
-      const dtoWithZeroAmount: CreditPurchaseDTO = {
+      const dtoWithZeroAmount: ICreditPurchaseDTO = {
         ...creditPurchaseDTO,
         grandTotal: { amount: 0, currency: CurrencyCodeEnum.USD },
       };
@@ -204,7 +204,7 @@ describe('CreditPurchaseHandler', () => {
     });
 
     it('should handle large amount purchase', async () => {
-      const dtoWithLargeAmount: CreditPurchaseDTO = {
+      const dtoWithLargeAmount: ICreditPurchaseDTO = {
         ...creditPurchaseDTO,
         grandTotal: { amount: 999999.99, currency: CurrencyCodeEnum.USD },
       };
